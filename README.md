@@ -1,14 +1,28 @@
 
 [<img src="https://github-ads.s3.eu-central-1.amazonaws.com/support-ukraine.svg?t=1" />](https://supportukrainenow.org)
 
-# augment SQL statements from laravel with comments that can be used later to correlate user code with SQL statements.
+# SqlCommenter
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-sqlcommenter.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-sqlcommenter)
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/spatie/laravel-sqlcommenter/run-tests?label=tests)](https://github.com/spatie/laravel-sqlcommenter/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/spatie/laravel-sqlcommenter/Check%20&%20fix%20styling?label=code%20style)](https://github.com/spatie/laravel-sqlcommenter/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-sqlcommenter.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-sqlcommenter)
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+Augment your Laravel queries with comments in [SqlCommenter](https://google.github.io/sqlcommenter/) format.
+
+SqlCommenter is compatible with [PlanetScale's Query Insights](https://docs.planetscale.com/concepts/query-insights).
+
+**Before**
+
+```mysql
+select * from users
+```
+
+**After**
+
+```mysql
+select * from "users"/*controller='UsersController',action='index'*/;
+```
 
 ## Support us
 
@@ -26,13 +40,6 @@ You can install the package via composer:
 composer require spatie/laravel-sqlcommenter
 ```
 
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag="laravel-sqlcommenter-migrations"
-php artisan migrate
-```
-
 You can publish the config file with:
 
 ```bash
@@ -42,22 +49,43 @@ php artisan vendor:publish --tag="laravel-sqlcommenter-config"
 This is the contents of the published config file:
 
 ```php
+<?php
+
 return [
+    /**
+     * Log the Laravel framework's version
+     */
+    'framework' => true,
+
+    /**
+     * Log which controller & action the query originated in
+     * you can also enable logging of the full namespace
+     * of the controller
+     */
+    'controller' => true,
+    'controller_namespace' => false,
+
+    /**
+     * Log which route the query originated in
+     */
+    'route' => true,
+
+    /**
+     * Log which job the query originated in
+     */
+    'job' => true,
+    'job_namespace' => false,
+
+    /**
+     * Log the db driver
+     */
+    'driver' => true,
 ];
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="laravel-sqlcommenter-views"
 ```
 
 ## Usage
 
-```php
-$sqlCommenter = new Spatie\SqlCommenter();
-echo $sqlCommenter->echoPhrase('Hello, Spatie!');
-```
+Configure which things you want to add to the SqlComments in the config file. After that, everything should work as expected.
 
 ## Testing
 

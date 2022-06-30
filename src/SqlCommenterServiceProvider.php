@@ -2,24 +2,23 @@
 
 namespace Spatie\SqlCommenter;
 
+use Illuminate\Database\Connection;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Spatie\SqlCommenter\Commands\SqlCommenterCommand;
 
 class SqlCommenterServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
     {
-        /*
-         * This class is a Package Service Provider
-         *
-         * More info: https://github.com/spatie/laravel-package-tools
-         */
         $package
             ->name('laravel-sqlcommenter')
-            ->hasConfigFile()
-            ->hasViews()
-            ->hasMigration('create_laravel-sqlcommenter_table')
-            ->hasCommand(SqlCommenterCommand::class);
+            ->hasConfigFile();
+    }
+
+    public function packageBooted(): void
+    {
+        app('db.connection')->beforeExecuting(function (string &$query, array &$bindings, Connection $connection) {
+            $query = SqlCommenter::commentQuery($query, $connection);
+        });
     }
 }

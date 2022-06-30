@@ -1,10 +1,10 @@
 {
     "name": "spatie/laravel-sqlcommenter",
-    "description": "augment SQL statements from laravel with comments that can be used later to correlate user code with SQL statements.",
+    "description": "Augment your Laravel queries with comments in SqlCommenter format",
     "keywords": [
         "spatie",
         "laravel",
-        "laravel-sqlcommenter"
+        "sqlcommenter"
     ],
     "homepage": "https://github.com/spatie/laravel-sqlcommenter",
     "license": "MIT",
@@ -17,8 +17,9 @@
     ],
     "require": {
         "php": "^8.1",
-        "spatie/laravel-package-tools": "^1.9.2",
-        "illuminate/contracts": "^9.0"
+        "illuminate/contracts": "^9.0",
+        "spatie/invade": "^1.0",
+        "spatie/laravel-package-tools": "^1.9.2"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.8",
@@ -51,16 +52,17 @@
         "format": "vendor/bin/php-cs-fixer fix --allow-risky=yes"
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
     },
     "extra": {
         "laravel": {
             "providers": [
                 "Spatie\\SqlCommenter\\SqlCommenterServiceProvider"
-            ],
-            "aliases": {
-                "SqlCommenter": "Spatie\\SqlCommenter\\Facades\\SqlCommenter"
-            }
+            ]
         }
     },
     "minimum-stability": "dev",
