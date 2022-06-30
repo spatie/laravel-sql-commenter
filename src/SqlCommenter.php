@@ -58,7 +58,7 @@ class SqlCommenter
         $query = Str::finish(trim($query), ';');
 
         if (Str::endsWith($query, ';')) {
-            return rtrim($query ,";") . self::formatComments($comment). ';';
+            return rtrim($query, ";") . self::formatComments($comment). ';';
         }
 
         return $query . self::formatComments($comment);
@@ -71,7 +71,7 @@ class SqlCommenter
         }
 
         return str(collect($comments)
-            ->map(fn($value, $key) => self::formatComment($key, $value))
+            ->map(fn ($value, $key) => self::formatComment($key, $value))
             ->join("',"))->prepend('/*')->append("'*/");
     }
 

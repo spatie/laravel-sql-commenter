@@ -4,10 +4,10 @@ use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
+use Spatie\SqlCommenter\SqlCommenter;
 use Spatie\SqlCommenter\Tests\TestClasses\User;
 use Spatie\SqlCommenter\Tests\TestClasses\UsersController;
 use Spatie\SqlCommenter\Tests\TestClasses\UsersJob;
-use Spatie\SqlCommenter\SqlCommenter;
 
 beforeEach(function () {
     $this->withoutExceptionHandling();
