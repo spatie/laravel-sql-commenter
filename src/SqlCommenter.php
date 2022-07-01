@@ -12,7 +12,8 @@ use Spatie\Backtrace\Frame;
 
 class SqlCommenter
 {
-    private static array $comments = [];
+    /** @var array<string> */
+    protected static array $comments = [];
 
     public static function addComment(string $key, ?string $value): void
     {
@@ -51,7 +52,9 @@ class SqlCommenter
 
         return str(collect($comments)
             ->map(fn ($value, $key) => self::formatComment($key, $value))
-            ->join("',"))->prepend('/*')->append("'*/");
+            ->join("',"))
+            ->prepend('/*')
+            ->append("'*/");
     }
 
     public static function formatComment(string $key, string $value): string
@@ -59,14 +62,14 @@ class SqlCommenter
         return urlencode($key) . "=" . "'" . urlencode($value);
     }
 
-    private static function addFrameworkVersion(): void
+    protected static function addFrameworkVersion(): void
     {
         if (config('sql-commenter.framework')) {
             self::addComment('framework', "laravel-" . app()->version());
         }
     }
 
-    private static function addControllerInfo(): void
+    protected static function addControllerInfo(): void
     {
         if (! config('sql-commenter.controller')) {
             return;
@@ -94,7 +97,7 @@ class SqlCommenter
         self::addComment('action', $action);
     }
 
-    private static function addRouteInfo(): void
+    protected static function addRouteInfo(): void
     {
         if (! config('sql-commenter.route')) {
             return;
@@ -104,7 +107,7 @@ class SqlCommenter
         self::addComment('route', request()->route()?->getName());
     }
 
-    private static function addJobInfo(): void
+    protected static function addJobInfo(): void
     {
         if (! config('sql-commenter.job')) {
             return;
@@ -126,7 +129,7 @@ class SqlCommenter
         self::addComment('job', $job);
     }
 
-    private static function addDatabaseDriver(Connection $connection): void
+    protected static function addDatabaseDriver(Connection $connection): void
     {
         if (! config('sql-commenter.driver')) {
             return;
@@ -135,13 +138,14 @@ class SqlCommenter
         self::addComment('db_driver', $connection->getConfig('driver'));
     }
 
-    private static function addFile(): void
+    protected static function addFile(): void
     {
         if (! config('sql-commenter.file')) {
             return;
         }
 
         $backtrace = new Backtrace();
+
         $frame = collect($backtrace->limit(config('sql-commenter.backtrace_limit', 20))->frames())
             ->first(function (Frame $frame) {
                 return ! str_contains($frame->file, 'laravel/framework')

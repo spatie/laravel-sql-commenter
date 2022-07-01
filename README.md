@@ -1,7 +1,7 @@
 
 [<img src="https://github-ads.s3.eu-central-1.amazonaws.com/support-ukraine.svg?t=1" />](https://supportukrainenow.org)
 
-# SqlCommenter
+# Add comments to your SQL queries made by Laravel
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-sql-commenter.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-sql-commenter)
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/spatie/laravel-sql-commenter/run-tests?label=tests)](https://github.com/spatie/laravel-sql-commenter/actions?query=workflow%3Arun-tests+branch%3Amain)
@@ -52,12 +52,12 @@ This is the contents of the published config file:
 <?php
 
 return [
-    /**
+    /*
      * Log the Laravel framework's version
      */
     'framework' => true,
 
-    /**
+    /*
      * Log which controller & action the query originated in
      * you can also enable logging of the full namespace
      * of the controller
@@ -65,23 +65,23 @@ return [
     'controller' => true,
     'controller_namespace' => false,
 
-    /**
+    /*
      * Log which route the query originated in
      */
     'route' => true,
 
-    /**
+    /*
      * Log which job the query originated in
      */
     'job' => true,
     'job_namespace' => false,
 
-    /**
+    /*
      * Log the db driver
      */
     'driver' => true,
 
-    /**
+    /*
      * Log the file and line number of the call
      */
     'file' => false,
