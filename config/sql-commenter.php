@@ -34,4 +34,5 @@ return [
      * Log the file and line number of the call
      */
     'file' => false,
+    'backtrace_limit' => 20,
 ];

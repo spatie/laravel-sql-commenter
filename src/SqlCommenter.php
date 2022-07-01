@@ -14,7 +14,7 @@ class SqlCommenter
 {
     private static array $comments = [];
 
-    public static function addComment(string $key, string $value): void
+    public static function addComment(string $key, ?string $value): void
     {
         self::$comments[$key] = $value;
     }
@@ -142,7 +142,7 @@ class SqlCommenter
         }
 
         $backtrace = new Backtrace();
-        $frame = collect($backtrace->frames())
+        $frame = collect($backtrace->limit(config('sql-commenter.backtrace_limit', 20))->frames())
             ->first(function (Frame $frame) {
                 return ! str_contains($frame->file, 'laravel/framework')
                     && ! str_contains($frame->file, 'laravel-sql-commenter/src');
