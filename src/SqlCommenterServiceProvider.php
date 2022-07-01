@@ -5,7 +5,6 @@ namespace Spatie\SqlCommenter;
 use Illuminate\Database\Connection;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Spatie\SqlCommenter\Tests\TestClasses\CustomCommenter;
 
 class SqlCommenterServiceProvider extends PackageServiceProvider
 {

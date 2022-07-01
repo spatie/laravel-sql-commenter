@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Spatie\SqlCommenter\SqlCommenter;
-use Spatie\SqlCommenter\SqlCommenterServiceProvider;
 use Spatie\SqlCommenter\Tests\TestClasses\CustomCommenter;
 use Spatie\SqlCommenter\Tests\TestClasses\User;
 use Spatie\SqlCommenter\Tests\TestClasses\UsersController;
@@ -121,7 +120,7 @@ it('logs the route name and url', function () {
             ->toContain(SqlCommenter::formatComment('route', 'users.index'));
     });
 
-    Route::get('/users', fn() => DB::table('users')->get())->name('users.index');
+    Route::get('/users', fn () => DB::table('users')->get())->name('users.index');
 
     $this->get('/users');
 });
@@ -197,7 +196,7 @@ it('will not add comments if there already are comments', function () {
     mysql);
 });
 
-it('can use a custom commenter class', function() {
+it('can use a custom commenter class', function () {
     config()->set('sql-commenter.commenter_class', CustomCommenter::class);
 
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
