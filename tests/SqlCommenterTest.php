@@ -150,13 +150,3 @@ it('logs the job it originated in without namespace', function () {
     dispatch(new UsersJob());
 });
 
-it('logs the file and line it originated in', function () {
-    config()->set('sqlcommenter.file', true);
-
-    Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
-        expect($event->sql)
-            ->toContain(SqlCommenter::formatComment('file', __FILE__));
-    });
-
-    DB::table('users')->get();
-});
