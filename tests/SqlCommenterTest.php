@@ -172,3 +172,16 @@ it('can add custom tags', function () {
 
     dispatch(new UsersJob());
 });
+
+it('will not add comments if there already are comments', function () {
+    Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
+        expect($event->sql)
+            ->not()->toContain(SqlCommenter::formatComment('foo', 'bar'));
+    });
+
+    SqlCommenter::addComment('foo', 'bar');
+
+    DB::statement(<<<mysql
+        select * from users; /*existing='comment'*/
+    mysql);
+});

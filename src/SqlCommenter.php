@@ -20,6 +20,10 @@ class SqlCommenter
 
     public static function commentQuery(string $query, Connection $connection): string
     {
+        if (str_contains($query, '/*')) {
+            return $query;
+        }
+
         self::addFrameworkVersion();
         self::addControllerInfo();
         self::addRouteInfo();
