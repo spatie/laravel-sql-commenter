@@ -11,7 +11,7 @@ use Spatie\Backtrace\Backtrace;
 
 class SqlCommenter
 {
-    private static $comments = [];
+    private static array $comments = [];
 
     public static function addComment(string $key, string $value): void
     {
