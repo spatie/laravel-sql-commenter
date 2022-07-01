@@ -11,8 +11,13 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Rias",
+            "name": "Rias Van der Veken",
             "email": "rias@spatie.be",
+            "role": "Developer"
+        },
+        {
+            "name": "Freek Van der Herten",
+            "email": "freek@spatie.be",
             "role": "Developer"
         }
     ],

@@ -1,42 +1,21 @@
 <?php
 
+use Spatie\SqlCommenter\Commenters\ControllerCommenter;
+use Spatie\SqlCommenter\Commenters\DbDriverCommenter;
+use Spatie\SqlCommenter\Commenters\FrameworkVersionCommenter;
+use Spatie\SqlCommenter\Commenters\JobCommenter;
+use Spatie\SqlCommenter\Commenters\RouteCommenter;
 use Spatie\SqlCommenter\SqlCommenter;
 
 return [
-    /*
-     * Log the Laravel framework's version
-     */
-    'framework' => true,
-
-    /*
-     * Log which controller & action the query originated in
-     * you can also enable logging of the full namespace
-     * of the controller
-     */
-    'controller' => true,
-    'controller_namespace' => false,
-
-    /*
-     * Log which route the query originated in
-     */
-    'route' => true,
-
-    /*
-     * Log which job the query originated in
-     */
-    'job' => true,
-    'job_namespace' => false,
-
-    /*
-     * Log the db driver
-     */
-    'driver' => true,
-
-    /*
-     * Log the file and line number of the call
-     */
-    'file' => false,
-    'backtrace_limit' => 20,
+    'commenters' => [
+        new FrameworkVersionCommenter(),
+        new ControllerCommenter(includeNamespace: false),
+        new RouteCommenter(),
+        new JobCommenter(includeNamespace: false),
+        new DbDriverCommenter(),
+        // new FileCommenter(backtraceLimit: 20),
+    ],
 
     /*
      * If you need fine-grained control over the logging, you can extend the

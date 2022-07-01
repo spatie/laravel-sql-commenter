@@ -2,13 +2,10 @@
 
 namespace Spatie\SqlCommenter;
 
-use Closure;
-use Illuminate\Bus\Dispatcher;
 use Illuminate\Database\Connection;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Laravel\SerializableClosure\Support\ReflectionClosure;
-use Spatie\Backtrace\Backtrace;
-use Spatie\Backtrace\Frame;
+use Spatie\SqlCommenter\Commenters\Commenter;
 
 class SqlCommenter
 {
@@ -20,28 +17,15 @@ class SqlCommenter
         static::$comments[$key] = $value;
     }
 
-    public static function commentQuery(string $query, Connection $connection): string
+    public static function commentQuery(string $query, Connection $connection, array $commenters): string
     {
         if (str_contains($query, '/*')) {
             return $query;
         }
 
-        static::addFrameworkVersion();
-        static::addControllerInfo();
-        static::addRouteInfo();
-        static::addJobInfo();
-        static::addDatabaseDriver($connection);
-        static::addFile();
+        self::addCommentsFromCommenters($commenters, $connection, $query);
 
-        $comments = array_filter(self::$comments);
-
-        $query = Str::finish(trim($query), ';');
-
-        if (Str::endsWith($query, ';')) {
-            return rtrim($query, ";") . self::formatComments($comments). ';';
-        }
-
-        return $query . static::formatComments($comments);
+        return self::addCommentsToQuery($query);
     }
 
     public static function formatComments(array $comments): string
@@ -62,97 +46,38 @@ class SqlCommenter
         return urlencode($key) . "=" . "'" . urlencode($value);
     }
 
-    protected static function addFrameworkVersion(): void
-    {
-        if (config('sql-commenter.framework')) {
-            static::addComment('framework', "laravel-" . app()->version());
-        }
+    /**
+     * @param array<Commenter> $commenters
+     * @param \Illuminate\Database\Connection $connection
+     * @param string $query
+     *
+     * @return void
+     */
+    protected static function addCommentsFromCommenters(
+        array $commenters,
+        Connection $connection,
+        string $query,
+    ): void {
+        collect($commenters)
+            ->flatMap(function (Commenter $commenter) use ($connection, $query) {
+                $comments = $commenter->comments($query, $connection) ?? [];
+
+                return Arr::wrap($comments);
+            })
+            ->filter()
+            ->each(fn (Comment $comment) => static::addComment($comment->key, $comment->value));
     }
 
-    protected static function addControllerInfo(): void
+    protected static function addCommentsToQuery(string $query): string
     {
-        if (! config('sql-commenter.controller')) {
-            return;
+        $comments = array_filter(self::$comments);
+
+        $query = Str::finish(trim($query), ';');
+
+        if (Str::endsWith($query, ';')) {
+            return rtrim($query, ";") . self::formatComments($comments) . ';';
         }
 
-        if (! request()->route()) {
-            return;
-        }
-
-        $action = request()->route()->getAction('uses');
-
-        if ($action instanceof Closure) {
-            $reflection = new ReflectionClosure($action);
-            $controller = 'Closure';
-            $action = $reflection->getFileName();
-        } else {
-            $controller = config('sql-commenter.controller_namespace')
-                ? explode('@', $action)[0] ?? null
-                : class_basename(explode('@', $action)[0]);
-
-            $action = explode('@', $action)[1] ?? null;
-        }
-
-        static::addComment('controller', $controller);
-        static::addComment('action', $action);
-    }
-
-    protected static function addRouteInfo(): void
-    {
-        if (! config('sql-commenter.route')) {
-            return;
-        }
-
-        static::addComment('url', request()->getPathInfo());
-        static::addComment('route', request()->route()?->getName());
-    }
-
-    protected static function addJobInfo(): void
-    {
-        if (! config('sql-commenter.job')) {
-            return;
-        }
-
-        if (! app()->runningInConsole()) {
-            return;
-        }
-
-        /** @phpstan-ignore-next-line */
-        $pipeline = invade(app(Dispatcher::class))->pipeline;
-        /** @phpstan-ignore-next-line */
-        $job = invade($pipeline)->passable;
-
-        $job = config('sql-commenter.job_namespace')
-            ? $job::class
-            : class_basename($job);
-
-        static::addComment('job', $job);
-    }
-
-    protected static function addDatabaseDriver(Connection $connection): void
-    {
-        if (! config('sql-commenter.driver')) {
-            return;
-        }
-
-        static::addComment('db_driver', $connection->getConfig('driver'));
-    }
-
-    protected static function addFile(): void
-    {
-        if (! config('sql-commenter.file')) {
-            return;
-        }
-
-        $backtrace = new Backtrace();
-
-        $frame = collect($backtrace->limit(config('sql-commenter.backtrace_limit', 20))->frames())
-            ->first(function (Frame $frame) {
-                return ! str_contains($frame->file, 'laravel/framework')
-                    && ! str_contains($frame->file, 'laravel-sql-commenter/src');
-            });
-
-        static::addComment('file', $frame?->file);
-        static::addComment('line', $frame?->lineNumber);
+        return $query . static::formatComments($comments);
     }
 }

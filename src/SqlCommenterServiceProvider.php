@@ -21,7 +21,9 @@ class SqlCommenterServiceProvider extends PackageServiceProvider
         app('db.connection')->beforeExecuting(function (string &$query, array &$bindings, Connection $connection) {
             $commenterClass = config('sql-commenter.commenter_class') ?? SqlCommenter::class;
 
-            $query = $commenterClass::commentQuery($query, $connection);
+            $commenters = config('sql-commenter.commenters');
+
+            $query = $commenterClass::commentQuery($query, $connection, $commenters);
         });
     }
 }
