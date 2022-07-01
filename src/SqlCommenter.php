@@ -143,9 +143,10 @@ class SqlCommenter
 
         $backtrace = new Backtrace();
         $frame = collect($backtrace->frames())
-            ->filter(fn (Frame $frame) => ! str_contains($frame->file, 'laravel/framework'))
-            ->filter(fn (Frame $frame) => ! str_contains($frame->file, 'laravel-sql-commenter/src'))
-            ->first();
+            ->first(function (Frame $frame) {
+                return ! str_contains($frame->file, 'laravel/framework')
+                    && ! str_contains($frame->file, 'laravel-sql-commenter/src');
+            });
 
         self::addComment('file', $frame?->file);
         self::addComment('line', $frame?->lineNumber);
