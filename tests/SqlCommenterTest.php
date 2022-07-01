@@ -149,3 +149,14 @@ it('logs the job it originated in without namespace', function () {
 
     dispatch(new UsersJob());
 });
+
+it('can add custom tags', function () {
+    Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
+        expect($event->sql)
+            ->toContain(SqlCommenter::formatComment('foo', 'bar'));
+    });
+
+    SqlCommenter::addTag('foo', 'bar');
+
+    dispatch(new UsersJob());
+});

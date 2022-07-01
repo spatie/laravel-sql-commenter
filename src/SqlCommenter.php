@@ -10,6 +10,13 @@ use Laravel\SerializableClosure\Support\ReflectionClosure;
 
 class SqlCommenter
 {
+    private static $tags = [];
+
+    public static function addTag(string $key, string $value): void
+    {
+        self::$tags[$key] = $value;
+    }
+
     public static function commentQuery(string $query, Connection $connection): string
     {
         $comment = [];
@@ -52,6 +59,10 @@ class SqlCommenter
 
         if (config('sqlcommenter.driver')) {
             $comment['db_driver'] = $connection->getConfig('driver');
+        }
+
+        foreach (self::$tags as $key => $value) {
+            $comment[$key] = $value;
         }
 
         $comment = array_filter($comment);

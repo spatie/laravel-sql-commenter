@@ -87,6 +87,16 @@ return [
 
 Configure which things you want to add to the SqlComments in the config file. After that, everything should work as expected.
 
+If you want to add other arbitrary tags to the SqlComment, you can use the `addTag` method:
+
+```php
+use Spatie\SqlCommenter\SqlCommenter;
+
+SqlCommenter::addTag('foo', 'bar');
+
+// select * from "users"/*foo='bar'*/;
+```
+
 ## Testing
 
 ```bash
