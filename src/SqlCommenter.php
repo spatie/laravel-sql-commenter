@@ -4,46 +4,32 @@ namespace Spatie\SqlCommenter;
 
 use Illuminate\Database\Connection;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Spatie\SqlCommenter\Commenters\Commenter;
 
 class SqlCommenter
 {
-    /** @var array<string> */
-    protected static array $comments = [];
+    /** @var array<Comment> */
+    protected static array $extraComments = [];
 
     public static function addComment(string $key, ?string $value): void
     {
-        static::$comments[$key] = $value;
+        static::$extraComments[$key] = new Comment($key, $value);
     }
 
-    public static function commentQuery(string $query, Connection $connection, array $commenters): string
+    public function commentQuery(string $query, Connection $connection, array $commenters): string
     {
         if (str_contains($query, '/*')) {
             return $query;
         }
 
-        self::addCommentsFromCommenters($commenters, $connection, $query);
+        $comments = $this->getCommentsFromCommenters($commenters, $connection, $query);
 
-        return self::addCommentsToQuery($query);
-    }
+        $comments->push(...self::$extraComments);
+        self::$extraComments = [];
 
-    public static function formatComments(array $comments): string
-    {
-        if (empty($comments)) {
-            return '';
-        }
-
-        return str(collect($comments)
-            ->map(fn ($value, $key) => static::formatComment($key, $value))
-            ->join("',"))
-            ->prepend('/*')
-            ->append("'*/");
-    }
-
-    public static function formatComment(string $key, string $value): string
-    {
-        return urlencode($key) . "=" . "'" . urlencode($value);
+        return $this->addCommentsToQuery($query, $comments);
     }
 
     /**
@@ -51,33 +37,36 @@ class SqlCommenter
      * @param \Illuminate\Database\Connection $connection
      * @param string $query
      *
-     * @return void
+     * @return Collection<Comment>
      */
-    protected static function addCommentsFromCommenters(
+    protected function getCommentsFromCommenters(
         array $commenters,
         Connection $connection,
         string $query,
-    ): void {
-        collect($commenters)
+    ): Collection {
+        return collect($commenters)
             ->flatMap(function (Commenter $commenter) use ($connection, $query) {
                 $comments = $commenter->comments($query, $connection) ?? [];
 
                 return Arr::wrap($comments);
             })
-            ->filter()
-            ->each(fn (Comment $comment) => static::addComment($comment->key, $comment->value));
+            ->filter();
     }
 
-    protected static function addCommentsToQuery(string $query): string
+    /**
+     * @param string $query
+     * @param Collection<Comment> $comments
+     *
+     * @return string
+     */
+    protected function addCommentsToQuery(string $query, Collection $comments): string
     {
-        $comments = array_filter(self::$comments);
-
         $query = Str::finish(trim($query), ';');
 
         if (Str::endsWith($query, ';')) {
-            return rtrim($query, ";") . self::formatComments($comments) . ';';
+            return rtrim($query, ";") . Comment::formatCollection($comments) . ';';
         }
 
-        return $query . static::formatComments($comments);
+        return $query . Comment::formatCollection($comments);
     }
 }

@@ -4,6 +4,7 @@ use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
+use Spatie\SqlCommenter\Comment;
 use Spatie\SqlCommenter\Commenters\FileCommenter;
 use Spatie\SqlCommenter\SqlCommenter;
 use Spatie\SqlCommenter\Tests\TestClasses\CustomCommenter;
@@ -11,31 +12,29 @@ use Spatie\SqlCommenter\Tests\TestClasses\User;
 use Spatie\SqlCommenter\Tests\TestClasses\UsersController;
 use Spatie\SqlCommenter\Tests\TestClasses\UsersJob;
 
-beforeEach(function () {
-    $this->withoutExceptionHandling();
-});
-
 it('formats comments with keys', function () {
-    expect(SqlCommenter::formatComments(["key1" => "value1", "key2" => "value2"]))
-        ->toBe("/*key1='value1',key2='value2'*/");
-});
+    $comments = collect([
+        Comment::make('key1', 'value1'),
+        Comment::make('key2', 'value2'),
+    ]);
 
-it('formats comments without keys', function () {
-    expect(SqlCommenter::formatComments([]))
-        ->toBe("");
+    expect(Comment::formatCollection($comments))->toBe("/*key1='value1',key2='value2'*/");
 });
 
 it('formats comments with special characters', function () {
-    expect(SqlCommenter::formatComments(["key1" => "value1@", "key2" => "value2"]))
-        ->toBe("/*key1='value1%40',key2='value2'*/");
+    $comments = collect([
+        Comment::make('key1', 'value1@'),
+        Comment::make('key2', 'value2'),
+    ]);
+
+    expect(Comment::formatCollection($comments))->toBe("/*key1='value1%40',key2='value2'*/");
 });
 
 it('logs the framework version if enabled', function () {
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
         $version = app()->version();
 
-        expect($event->sql)
-            ->toContain(SqlCommenter::formatComment('framework', "laravel-{$version}"));
+        expect($event->sql)->toContainComment('framework', "laravel-{$version}");
     });
 
     DB::table('users')->get();
@@ -45,8 +44,8 @@ it('logs the framework version if enabled', function () {
 it('logs the controller and action with an invokable controller', function () {
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
         expect($event->sql)
-            ->toContain(SqlCommenter::formatComment('controller', class_basename(UsersController::class)))
-            ->toContain(SqlCommenter::formatComment('action', '__invoke'));
+            ->toContainComment('controller', class_basename(UsersController::class))
+            ->toContainComment('action', '__invoke');
     });
 
     Route::get('/users', UsersController::class);
@@ -57,8 +56,8 @@ it('logs the controller and action with an invokable controller', function () {
 it('logs the controller and action with a controller method', function () {
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
         expect($event->sql)
-            ->toContain(SqlCommenter::formatComment('controller', class_basename(UsersController::class)))
-            ->toContain(SqlCommenter::formatComment('action', 'index'));
+            ->toContainComment('controller', class_basename(UsersController::class))
+            ->toContainComment('action', 'index');
     });
 
     Route::get('/users', [UsersController::class, 'index']);
@@ -69,7 +68,7 @@ it('logs the controller and action with a controller method', function () {
 it('logs the controller and action with a closure', function () {
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
         expect($event->sql)
-            ->toContain(SqlCommenter::formatComment('controller', 'Closure'))
+            ->toContainComment('controller', 'Closure')
             ->toContain('SqlCommenterTest.php');
     });
 
@@ -85,8 +84,8 @@ it('logs the route name and url', function () {
 
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
         expect($event->sql)
-            ->toContain(SqlCommenter::formatComment('url', '/users'))
-            ->toContain(SqlCommenter::formatComment('route', 'users.index'));
+            ->toContainComment('url', '/users')
+            ->toContainComment('route', 'users.index');
     });
 
     Route::get('/users', fn () => DB::table('users')->get())->name('users.index');
@@ -96,7 +95,7 @@ it('logs the route name and url', function () {
 
 it('logs the job it originated in', function () {
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
-        expect($event->sql)->toContain(SqlCommenter::formatComment('job', class_basename(UsersJob::class)));
+        expect($event->sql)->toContainComment('job', class_basename(UsersJob::class));
     });
 
     dispatch(new UsersJob());
@@ -108,8 +107,7 @@ it('logs the file it originated in', function () {
 
 
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
-        expect($event->sql)
-            ->toContain(SqlCommenter::formatComment('file', __DIR__ . '/TestClasses/UsersJob.php'));
+        expect($event->sql)->toContainComment('file', __DIR__ . '/TestClasses/UsersJob.php');
     });
 
     dispatch(new UsersJob());
@@ -119,20 +117,19 @@ it('logs the file it originated in with eloquent', function () {
     config()->set('sql-commenter.commenters', [new FileCommenter()]);
 
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
-        expect($event->sql)
-            ->toContain(SqlCommenter::formatComment('file', __FILE__));
+        expect($event->sql)->toContainComment('file', __FILE__);
     });
 
     User::count();
 });
 
-it('can add custom tags', function () {
+it('can add extra comments', function () {
+
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
-        expect($event->sql)
-            ->toContain(SqlCommenter::formatComment('foo', 'bar'));
+        expect($event->sql)->toContainComment('foo', 'bar');
     });
 
-    SqlCommenter::addComment('foo', 'bar');
+   SqlCommenter::addComment('foo', 'bar');
 
     dispatch(new UsersJob());
 });
@@ -140,7 +137,7 @@ it('can add custom tags', function () {
 it('will not add comments if there already are comments', function () {
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
         expect($event->sql)
-            ->not()->toContain(SqlCommenter::formatComment('foo', 'bar'));
+            ->not()->toContainComment('foo', 'bar');
     });
 
     SqlCommenter::addComment('foo', 'bar');
