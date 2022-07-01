@@ -149,4 +149,3 @@ it('logs the job it originated in without namespace', function () {
 
     dispatch(new UsersJob());
 });
-
