@@ -12,7 +12,7 @@ use Spatie\SqlCommenter\Tests\TestClasses\UsersJob;
 beforeEach(function () {
     $this->withoutExceptionHandling();
 
-    config()->set('sqlcommenter', [
+    config()->set('sql-commenter', [
         'framework' => false,
         'controller' => false,
         'controller_namespace' => true,
@@ -39,7 +39,7 @@ it('formats comments with special characters', function () {
 });
 
 it('logs the framework version if enabled', function () {
-    config()->set('sqlcommenter.framework', true);
+    config()->set('sql-commenter.framework', true);
 
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
         $version = app()->version();
@@ -52,7 +52,7 @@ it('logs the framework version if enabled', function () {
 });
 
 it('logs the controller and action with an invokable controller', function () {
-    config()->set('sqlcommenter.controller', true);
+    config()->set('sql-commenter.controller', true);
 
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
         expect($event->sql)
@@ -66,7 +66,7 @@ it('logs the controller and action with an invokable controller', function () {
 });
 
 it('logs the controller and action with a controller method', function () {
-    config()->set('sqlcommenter.controller', true);
+    config()->set('sql-commenter.controller', true);
 
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
         expect($event->sql)
@@ -80,8 +80,8 @@ it('logs the controller and action with a controller method', function () {
 });
 
 it('can omit the controller namespace', function () {
-    config()->set('sqlcommenter.controller', true);
-    config()->set('sqlcommenter.controller_namespace', false);
+    config()->set('sql-commenter.controller', true);
+    config()->set('sql-commenter.controller_namespace', false);
 
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
         expect($event->sql)
@@ -95,7 +95,7 @@ it('can omit the controller namespace', function () {
 });
 
 it('logs the controller and action with a closure', function () {
-    config()->set('sqlcommenter.controller', true);
+    config()->set('sql-commenter.controller', true);
 
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
         expect($event->sql)
@@ -111,7 +111,7 @@ it('logs the controller and action with a closure', function () {
 });
 
 it('logs the route name and url', function () {
-    config()->set('sqlcommenter.route', true);
+    config()->set('sql-commenter.route', true);
 
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
         expect($event->sql)
@@ -127,8 +127,8 @@ it('logs the route name and url', function () {
 });
 
 it('logs the job it originated in', function () {
-    config()->set('sqlcommenter.job', true);
-    config()->set('sqlcommenter.job_namespace', true);
+    config()->set('sql-commenter.job', true);
+    config()->set('sql-commenter.job_namespace', true);
 
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
         expect($event->sql)
@@ -139,8 +139,8 @@ it('logs the job it originated in', function () {
 });
 
 it('logs the job it originated in without namespace', function () {
-    config()->set('sqlcommenter.job', true);
-    config()->set('sqlcommenter.job_namespace', false);
+    config()->set('sql-commenter.job', true);
+    config()->set('sql-commenter.job_namespace', false);
 
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
         expect($event->sql)
@@ -151,7 +151,7 @@ it('logs the job it originated in without namespace', function () {
 });
 
 it('logs the file it originated in', function () {
-    config()->set('sqlcommenter.file', true);
+    config()->set('sql-commenter.file', true);
 
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
         expect($event->sql)

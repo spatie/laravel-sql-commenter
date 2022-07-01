@@ -11,7 +11,7 @@ class SqlCommenterServiceProvider extends PackageServiceProvider
     public function configurePackage(Package $package): void
     {
         $package
-            ->name('laravel-sqlcommenter')
+            ->name('laravel-sql-commenter')
             ->hasConfigFile();
     }
 

@@ -1,12 +1,13 @@
 {
-    "name": "spatie/laravel-sqlcommenter",
+    "name": "spatie/laravel-sql-commenter",
     "description": "Augment your Laravel queries with comments in SqlCommenter format",
     "keywords": [
         "spatie",
         "laravel",
-        "sqlcommenter"
+        "sqlcommenter",
+        "sql-commenter"
     ],
-    "homepage": "https://github.com/spatie/laravel-sqlcommenter",
+    "homepage": "https://github.com/spatie/laravel-sql-commenter",
     "license": "MIT",
     "authors": [
         {

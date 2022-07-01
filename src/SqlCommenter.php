@@ -22,11 +22,11 @@ class SqlCommenter
     {
         $comment = [];
 
-        if (config('sqlcommenter.framework')) {
+        if (config('sql-commenter.framework')) {
             $comment['framework'] = "laravel-" . app()->version();
         }
 
-        if (request()->route() && config('sqlcommenter.controller')) {
+        if (request()->route() && config('sql-commenter.controller')) {
             $action = request()->route()->getAction('uses');
 
             if ($action instanceof Closure) {
@@ -34,7 +34,7 @@ class SqlCommenter
                 $comment['controller'] = 'Closure';
                 $comment['action'] = $reflection->getFileName();
             } else {
-                $comment['controller'] = config('sqlcommenter.controller_namespace')
+                $comment['controller'] = config('sql-commenter.controller_namespace')
                     ? explode('@', $action)[0] ?? null
                     : class_basename(explode('@', $action)[0]);
 
@@ -42,27 +42,27 @@ class SqlCommenter
             }
         }
 
-        if (config('sqlcommenter.route')) {
+        if (config('sql-commenter.route')) {
             $comment['url'] = request()->getPathInfo();
             $comment['route'] = request()->route()?->getName();
         }
 
-        if (app()->runningInConsole() && config('sqlcommenter.job')) {
+        if (app()->runningInConsole() && config('sql-commenter.job')) {
             /** @phpstan-ignore-next-line */
             $pipeline = invade(app(Dispatcher::class))->pipeline;
             /** @phpstan-ignore-next-line */
             $job = invade($pipeline)->passable;
 
-            $comment['job'] = config('sqlcommenter.job_namespace')
+            $comment['job'] = config('sql-commenter.job_namespace')
                 ? $job::class
                 : class_basename($job);
         }
 
-        if (config('sqlcommenter.driver')) {
+        if (config('sql-commenter.driver')) {
             $comment['db_driver'] = $connection->getConfig('driver');
         }
 
-        if (config('sqlcommenter.file')) {
+        if (config('sql-commenter.file')) {
             $backtrace = new Backtrace();
             $frame = $backtrace->frames()[8];
 

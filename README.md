@@ -3,10 +3,10 @@
 
 # SqlCommenter
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-sqlcommenter.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-sqlcommenter)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/spatie/laravel-sqlcommenter/run-tests?label=tests)](https://github.com/spatie/laravel-sqlcommenter/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/spatie/laravel-sqlcommenter/Check%20&%20fix%20styling?label=code%20style)](https://github.com/spatie/laravel-sqlcommenter/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-sqlcommenter.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-sqlcommenter)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-sql-commenter.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-sql-commenter)
+[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/spatie/laravel-sql-commenter/run-tests?label=tests)](https://github.com/spatie/laravel-sql-commenter/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/spatie/laravel-sql-commenter/Check%20&%20fix%20styling?label=code%20style)](https://github.com/spatie/laravel-sql-commenter/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain)
+[![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-sql-commenter.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-sql-commenter)
 
 Augment your Laravel queries with comments in [SqlCommenter](https://google.github.io/sqlcommenter/) format.
 
@@ -26,7 +26,7 @@ select * from "users"/*controller='UsersController',action='index'*/;
 
 ## Support us
 
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/laravel-sqlcommenter.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/laravel-sqlcommenter)
+[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/laravel-sql-commenter.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/laravel-sql-commenter)
 
 We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
 
@@ -37,13 +37,13 @@ We highly appreciate you sending us a postcard from your hometown, mentioning wh
 You can install the package via composer:
 
 ```bash
-composer require spatie/laravel-sqlcommenter
+composer require spatie/laravel-sql-commenter
 ```
 
 You can publish the config file with:
 
 ```bash
-php artisan vendor:publish --tag="laravel-sqlcommenter-config"
+php artisan vendor:publish --tag="laravel-sql-commenter-config"
 ```
 
 This is the contents of the published config file:
