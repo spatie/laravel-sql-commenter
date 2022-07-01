@@ -1,5 +1,7 @@
 <?php
 
+use Spatie\SqlCommenter\SqlCommenter;
+
 return [
     /*
      * Log the Laravel framework's version
@@ -35,4 +37,10 @@ return [
      */
     'file' => false,
     'backtrace_limit' => 20,
+
+    /*
+     * If you need fine-grained control over the logging, you can extend the
+     * SqlCommenter class and specify your custom class here.
+     */
+    'commenter_class' => SqlCommenter::class,
 ];

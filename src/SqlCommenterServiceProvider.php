@@ -5,6 +5,7 @@ namespace Spatie\SqlCommenter;
 use Illuminate\Database\Connection;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
+use Spatie\SqlCommenter\Tests\TestClasses\CustomCommenter;
 
 class SqlCommenterServiceProvider extends PackageServiceProvider
 {
@@ -18,7 +19,9 @@ class SqlCommenterServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         app('db.connection')->beforeExecuting(function (string &$query, array &$bindings, Connection $connection) {
-            $query = SqlCommenter::commentQuery($query, $connection);
+            $commenterClass = config('sql-commenter.commenter_class') ?? SqlCommenter::class;
+
+            $query = $commenterClass::commentQuery($query, $connection);
         });
     }
 }

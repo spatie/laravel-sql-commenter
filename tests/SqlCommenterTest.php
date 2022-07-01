@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Spatie\SqlCommenter\SqlCommenter;
+use Spatie\SqlCommenter\SqlCommenterServiceProvider;
+use Spatie\SqlCommenter\Tests\TestClasses\CustomCommenter;
 use Spatie\SqlCommenter\Tests\TestClasses\User;
 use Spatie\SqlCommenter\Tests\TestClasses\UsersController;
 use Spatie\SqlCommenter\Tests\TestClasses\UsersJob;
@@ -119,9 +121,7 @@ it('logs the route name and url', function () {
             ->toContain(SqlCommenter::formatComment('route', 'users.index'));
     });
 
-    Route::get('/users', function () {
-        return DB::table('users')->get();
-    })->name('users.index');
+    Route::get('/users', fn() => DB::table('users')->get())->name('users.index');
 
     $this->get('/users');
 });
@@ -131,8 +131,7 @@ it('logs the job it originated in', function () {
     config()->set('sql-commenter.job_namespace', true);
 
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
-        expect($event->sql)
-            ->toContain(SqlCommenter::formatComment('job', UsersJob::class));
+        expect($event->sql)->toContain(SqlCommenter::formatComment('job', UsersJob::class));
     });
 
     dispatch(new UsersJob());
@@ -168,7 +167,7 @@ it('logs the file it originated in with eloquent', function () {
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
         expect($event->sql)
             ->toContain(SqlCommenter::formatComment('file', __FILE__))
-            ->toContain(SqlCommenter::formatComment('line', 174));
+            ->toContain(SqlCommenter::formatComment('line', 173));
     });
 
     User::count();
@@ -196,4 +195,14 @@ it('will not add comments if there already are comments', function () {
     DB::statement(<<<mysql
         select * from users; /*existing='comment'*/
     mysql);
+});
+
+it('can use a custom commenter class', function() {
+    config()->set('sql-commenter.commenter_class', CustomCommenter::class);
+
+    Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
+        expect($event->sql)->toContain(CustomCommenter::formatComment('framework', 'spatie-framework'));
+    });
+
+    dispatch(new UsersJob());
 });

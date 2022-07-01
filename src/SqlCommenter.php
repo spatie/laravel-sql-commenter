@@ -17,7 +17,7 @@ class SqlCommenter
 
     public static function addComment(string $key, ?string $value): void
     {
-        self::$comments[$key] = $value;
+        static::$comments[$key] = $value;
     }
 
     public static function commentQuery(string $query, Connection $connection): string
@@ -26,12 +26,12 @@ class SqlCommenter
             return $query;
         }
 
-        self::addFrameworkVersion();
-        self::addControllerInfo();
-        self::addRouteInfo();
-        self::addJobInfo();
-        self::addDatabaseDriver($connection);
-        self::addFile();
+        static::addFrameworkVersion();
+        static::addControllerInfo();
+        static::addRouteInfo();
+        static::addJobInfo();
+        static::addDatabaseDriver($connection);
+        static::addFile();
 
         $comments = array_filter(self::$comments);
 
@@ -41,7 +41,7 @@ class SqlCommenter
             return rtrim($query, ";") . self::formatComments($comments). ';';
         }
 
-        return $query . self::formatComments($comments);
+        return $query . static::formatComments($comments);
     }
 
     public static function formatComments(array $comments): string
@@ -51,7 +51,7 @@ class SqlCommenter
         }
 
         return str(collect($comments)
-            ->map(fn ($value, $key) => self::formatComment($key, $value))
+            ->map(fn ($value, $key) => static::formatComment($key, $value))
             ->join("',"))
             ->prepend('/*')
             ->append("'*/");
@@ -65,7 +65,7 @@ class SqlCommenter
     protected static function addFrameworkVersion(): void
     {
         if (config('sql-commenter.framework')) {
-            self::addComment('framework', "laravel-" . app()->version());
+            static::addComment('framework', "laravel-" . app()->version());
         }
     }
 
@@ -93,8 +93,8 @@ class SqlCommenter
             $action = explode('@', $action)[1] ?? null;
         }
 
-        self::addComment('controller', $controller);
-        self::addComment('action', $action);
+        static::addComment('controller', $controller);
+        static::addComment('action', $action);
     }
 
     protected static function addRouteInfo(): void
@@ -103,8 +103,8 @@ class SqlCommenter
             return;
         }
 
-        self::addComment('url', request()->getPathInfo());
-        self::addComment('route', request()->route()?->getName());
+        static::addComment('url', request()->getPathInfo());
+        static::addComment('route', request()->route()?->getName());
     }
 
     protected static function addJobInfo(): void
@@ -126,7 +126,7 @@ class SqlCommenter
             ? $job::class
             : class_basename($job);
 
-        self::addComment('job', $job);
+        static::addComment('job', $job);
     }
 
     protected static function addDatabaseDriver(Connection $connection): void
@@ -135,7 +135,7 @@ class SqlCommenter
             return;
         }
 
-        self::addComment('db_driver', $connection->getConfig('driver'));
+        static::addComment('db_driver', $connection->getConfig('driver'));
     }
 
     protected static function addFile(): void
@@ -152,7 +152,7 @@ class SqlCommenter
                     && ! str_contains($frame->file, 'laravel-sql-commenter/src');
             });
 
-        self::addComment('file', $frame?->file);
-        self::addComment('line', $frame?->lineNumber);
+        static::addComment('file', $frame?->file);
+        static::addComment('line', $frame?->lineNumber);
     }
 }
