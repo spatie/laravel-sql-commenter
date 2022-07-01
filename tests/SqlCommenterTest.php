@@ -168,7 +168,7 @@ it('can add custom tags', function () {
             ->toContain(SqlCommenter::formatComment('foo', 'bar'));
     });
 
-    SqlCommenter::addTag('foo', 'bar');
+    SqlCommenter::addComment('foo', 'bar');
 
     dispatch(new UsersJob());
 });

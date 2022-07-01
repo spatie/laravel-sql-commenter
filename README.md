@@ -97,7 +97,7 @@ If you want to add other arbitrary tags to the SqlComment, you can use the `addT
 ```php
 use Spatie\SqlCommenter\SqlCommenter;
 
-SqlCommenter::addTag('foo', 'bar');
+SqlCommenter::addComment('foo', 'bar');
 
 // select * from "users"/*foo='bar'*/;
 ```
