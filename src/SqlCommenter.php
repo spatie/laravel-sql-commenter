@@ -63,66 +63,83 @@ class SqlCommenter
 
     private static function addControllerInfo(): void
     {
-        if (request()->route() && config('sql-commenter.controller')) {
-            $action = request()->route()->getAction('uses');
-
-            if ($action instanceof Closure) {
-                $reflection = new ReflectionClosure($action);
-                $controller = 'Closure';
-                $action = $reflection->getFileName();
-            } else {
-                $controller = config('sql-commenter.controller_namespace')
-                    ? explode('@', $action)[0] ?? null
-                    : class_basename(explode('@', $action)[0]);
-
-
-                $action = explode('@', $action)[1] ?? null;
-            }
-
-            self::addComment('controller', $controller);
-            self::addComment('action', $action);
+        if (! config('sql-commenter.controller')) {
+            return;
         }
+
+        if (! request()->route()) {
+            return;
+        }
+
+        $action = request()->route()->getAction('uses');
+
+        if ($action instanceof Closure) {
+            $reflection = new ReflectionClosure($action);
+            $controller = 'Closure';
+            $action = $reflection->getFileName();
+        } else {
+            $controller = config('sql-commenter.controller_namespace')
+                ? explode('@', $action)[0] ?? null
+                : class_basename(explode('@', $action)[0]);
+
+            $action = explode('@', $action)[1] ?? null;
+        }
+
+        self::addComment('controller', $controller);
+        self::addComment('action', $action);
     }
 
     private static function addRouteInfo(): void
     {
-        if (config('sql-commenter.route')) {
-            self::addComment('url', request()->getPathInfo());
-            self::addComment('route', request()->route()?->getName());
+        if (! config('sql-commenter.route')) {
+            return;
         }
+
+        self::addComment('url', request()->getPathInfo());
+        self::addComment('route', request()->route()?->getName());
     }
 
     private static function addJobInfo(): void
     {
-        if (app()->runningInConsole() && config('sql-commenter.job')) {
-            /** @phpstan-ignore-next-line */
-            $pipeline = invade(app(Dispatcher::class))->pipeline;
-            /** @phpstan-ignore-next-line */
-            $job = invade($pipeline)->passable;
-
-            $job = config('sql-commenter.job_namespace')
-                ? $job::class
-                : class_basename($job);
-
-            self::addComment('job', $job);
+        if (! config('sql-commenter.job')) {
+            return;
         }
+
+        if (! app()->runningInConsole()) {
+            return;
+        }
+
+        /** @phpstan-ignore-next-line */
+        $pipeline = invade(app(Dispatcher::class))->pipeline;
+        /** @phpstan-ignore-next-line */
+        $job = invade($pipeline)->passable;
+
+        $job = config('sql-commenter.job_namespace')
+            ? $job::class
+            : class_basename($job);
+
+        self::addComment('job', $job);
     }
 
     private static function addDatabaseDriver(Connection $connection): void
     {
-        if (config('sql-commenter.driver')) {
-            self::addComment('db_driver', $connection->getConfig('driver'));
+        if (! config('sql-commenter.driver')) {
+            return;
         }
+
+        self::addComment('db_driver', $connection->getConfig('driver'));
     }
 
     private static function addFile(): void
     {
-        if (config('sql-commenter.file')) {
-            $backtrace = new Backtrace();
-            $frame = $backtrace->frames()[9];
-
-            self::addComment('file', $frame->file);
-            self::addComment('line', $frame->lineNumber);
+        if (! config('sql-commenter.file')) {
+            return;
         }
+
+        $backtrace = new Backtrace();
+        $frame = $backtrace->frames()[9];
+
+        self::addComment('file', $frame->file);
+        self::addComment('line', $frame->lineNumber);
     }
 }
