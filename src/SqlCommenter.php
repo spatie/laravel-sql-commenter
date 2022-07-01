@@ -18,8 +18,8 @@ class SqlCommenter
             $comment['framework'] = "laravel-" . app()->version();
         }
 
-        if (request() && config('sqlcommenter.controller')) {
-            $action = request()?->route()?->getAction('uses');
+        if (request()->route() && config('sqlcommenter.controller')) {
+            $action = request()->route()->getAction('uses');
 
             if ($action instanceof Closure) {
                 $reflection = new ReflectionClosure($action);
@@ -34,14 +34,15 @@ class SqlCommenter
             }
         }
 
-        if (request() && config('sqlcommenter.route')) {
-            $comment['url'] = request()?->getRequestUri();
-            $comment['route'] = request()?->route()?->getName();
+        if (request()->route() && config('sqlcommenter.route')) {
+            $comment['url'] = request()->getRequestUri();
+            $comment['route'] = request()->route()->getName();
         }
 
         if (app()->runningInConsole() && config('sqlcommenter.job')) {
-            /** @var \Illuminate\Pipeline\Pipeline $pipeline */
+            /** @phpstan-ignore-next-line */
             $pipeline = invade(app(Dispatcher::class))->pipeline;
+            /** @phpstan-ignore-next-line */
             $job = invade($pipeline)->passable;
 
             $comment['job'] = config('sqlcommenter.job_namespace')
