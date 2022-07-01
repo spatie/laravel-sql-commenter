@@ -41,9 +41,9 @@ class SqlCommenter
             }
         }
 
-        if (request()->route() && config('sqlcommenter.route')) {
-            $comment['url'] = request()->getRequestUri();
-            $comment['route'] = request()->route()->getName();
+        if (config('sqlcommenter.route')) {
+            $comment['url'] = request()->getPathInfo();
+            $comment['route'] = request()->route()?->getName();
         }
 
         if (app()->runningInConsole() && config('sqlcommenter.job')) {
