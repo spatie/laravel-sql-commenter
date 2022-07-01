@@ -7,6 +7,7 @@ use Illuminate\Bus\Dispatcher;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Str;
 use Laravel\SerializableClosure\Support\ReflectionClosure;
+use Spatie\Backtrace\Backtrace;
 
 class SqlCommenter
 {
@@ -61,6 +62,14 @@ class SqlCommenter
             $comment['db_driver'] = $connection->getConfig('driver');
         }
 
+        if (config('sqlcommenter.file')) {
+            $backtrace = new Backtrace();
+            $frame = $backtrace->frames()[8];
+
+            $comment['file'] = $frame->file;
+            $comment['line'] = $frame->lineNumber;
+        }
+
         foreach (self::$tags as $key => $value) {
             $comment[$key] = $value;
         }
@@ -89,11 +98,6 @@ class SqlCommenter
 
     public static function formatComment(string $key, string $value): string
     {
-        return self::doubleEscapedUrlEncode($key) . "=" . "'" . self::doubleEscapedUrlEncode($value);
-    }
-
-    private static function doubleEscapedUrlEncode(string $input): string
-    {
-        return str_replace("%", "%%", urlencode($input));
+        return urlencode($key) . "=" . "'" . urlencode($value);
     }
 }

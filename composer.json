@@ -18,6 +18,7 @@
     "require": {
         "php": "^8.1",
         "illuminate/contracts": "^9.0",
+        "spatie/backtrace": "^1.2",
         "spatie/invade": "^1.0",
         "spatie/laravel-package-tools": "^1.9.2"
     },

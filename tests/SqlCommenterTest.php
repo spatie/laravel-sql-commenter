@@ -19,7 +19,7 @@ beforeEach(function () {
         'route' => false,
         'job' => false,
         'driver' => false,
-        'opentelemetry' => false,
+        'file' => false,
     ]);
 });
 
@@ -35,7 +35,7 @@ it('formats comments without keys', function () {
 
 it('formats comments with special characters', function () {
     expect(SqlCommenter::formatComments(["key1" => "value1@", "key2" => "value2"]))
-        ->toBe("/*key1='value1%%40',key2='value2'*/");
+        ->toBe("/*key1='value1%40',key2='value2'*/");
 });
 
 it('logs the framework version if enabled', function () {
@@ -145,6 +145,18 @@ it('logs the job it originated in without namespace', function () {
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
         expect($event->sql)
             ->toContain(SqlCommenter::formatComment('job', 'UsersJob'));
+    });
+
+    dispatch(new UsersJob());
+});
+
+it('logs the file it originated in', function () {
+    config()->set('sqlcommenter.file', true);
+
+    Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
+        expect($event->sql)
+            ->toContain(SqlCommenter::formatComment('file', __DIR__ . '/TestClasses/UsersJob.php'))
+            ->toContain(SqlCommenter::formatComment('line', 21));
     });
 
     dispatch(new UsersJob());

@@ -80,6 +80,11 @@ return [
      * Log the db driver
      */
     'driver' => true,
+
+    /**
+     * Log the file and line number of the call
+     */
+    'file' => false,
 ];
 ```
 
