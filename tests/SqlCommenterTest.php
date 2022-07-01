@@ -162,6 +162,18 @@ it('logs the file it originated in', function () {
     dispatch(new UsersJob());
 });
 
+it('logs the file it originated in with eloquent', function () {
+    config()->set('sql-commenter.file', true);
+
+    Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
+        expect($event->sql)
+            ->toContain(SqlCommenter::formatComment('file', __FILE__))
+            ->toContain(SqlCommenter::formatComment('line', 174));
+    });
+
+    User::count();
+});
+
 it('can add custom tags', function () {
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
         expect($event->sql)

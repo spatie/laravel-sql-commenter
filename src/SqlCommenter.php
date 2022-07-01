@@ -8,6 +8,7 @@ use Illuminate\Database\Connection;
 use Illuminate\Support\Str;
 use Laravel\SerializableClosure\Support\ReflectionClosure;
 use Spatie\Backtrace\Backtrace;
+use Spatie\Backtrace\Frame;
 
 class SqlCommenter
 {
@@ -141,9 +142,12 @@ class SqlCommenter
         }
 
         $backtrace = new Backtrace();
-        $frame = $backtrace->frames()[9];
+        $frame = collect($backtrace->frames())
+            ->filter(fn (Frame $frame) => ! str_contains($frame->file, 'laravel/framework'))
+            ->filter(fn (Frame $frame) => ! str_contains($frame->file, 'laravel-sql-commenter/src'))
+            ->first();
 
-        self::addComment('file', $frame->file);
-        self::addComment('line', $frame->lineNumber);
+        self::addComment('file', $frame?->file);
+        self::addComment('line', $frame?->lineNumber);
     }
 }
