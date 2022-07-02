@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\SqlCommenter\Tests;
+namespace Spatie\SqlCommenter\Tests\TestSupport;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
@@ -28,7 +28,7 @@ class TestCase extends Orchestra
     {
         config()->set('database.default', 'testing');
 
-        $migration = include __DIR__.'/../vendor/orchestra/testbench-core/laravel/migrations/2014_10_12_000000_testbench_create_users_table.php';
+        $migration = include __DIR__.'/../../vendor/orchestra/testbench-core/laravel/migrations/2014_10_12_000000_testbench_create_users_table.php';
         $migration->up();
     }
 }

@@ -1,28 +1,29 @@
 
 [<img src="https://github-ads.s3.eu-central-1.amazonaws.com/support-ukraine.svg?t=1" />](https://supportukrainenow.org)
 
-# SqlCommenter
+# Add comments to SQL queries made by Laravel
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-sql-commenter.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-sql-commenter)
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/spatie/laravel-sql-commenter/run-tests?label=tests)](https://github.com/spatie/laravel-sql-commenter/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/spatie/laravel-sql-commenter/Check%20&%20fix%20styling?label=code%20style)](https://github.com/spatie/laravel-sql-commenter/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-sql-commenter.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-sql-commenter)
 
-Augment your Laravel queries with comments in [SqlCommenter](https://google.github.io/sqlcommenter/) format.
+This package can add comments to queries perform by Laravel. These comments will use the [sqlformatter](https://google.github.io/sqlcommenter/) format, which is understood by various tools and services, such as [PlanetScale's Query Insights](https://docs.planetscale.com/concepts/query-insights).
 
-SqlCommenter is compatible with [PlanetScale's Query Insights](https://docs.planetscale.com/concepts/query-insights).
-
-**Before**
+Here's how a query looks by default:
 
 ```mysql
 select * from users
 ```
 
-**After**
+Using this package, comments that like this one will be added.
 
 ```mysql
 select * from "users"/*controller='UsersController',action='index'*/;
 ```
+
+Using these comments, you can easily find the source of the query in your codebase.
+
 
 ## Support us
 
@@ -40,60 +41,44 @@ You can install the package via composer:
 composer require spatie/laravel-sql-commenter
 ```
 
-You can publish the config file with:
+Optionally, you can publish the config file with:
 
 ```bash
-php artisan vendor:publish --tag="laravel-sql-commenter-config"
+php artisan vendor:publish --tag="sql-commenter-config"
 ```
 
-This is the contents of the published config file:
+This is the content of the published config file:
 
 ```php
-<?php
-
 return [
-    /**
-     * Log the Laravel framework's version
+    /*
+     * These classes add comments to an executed query.
      */
-    'framework' => true,
+    'commenters' => [
+        new Spatie\SqlCommenter\Commenters\FrameworkVersionCommenter(),
+        new Spatie\SqlCommenter\Commenters\ControllerCommenter(includeNamespace: false),
+        new Spatie\SqlCommenter\Commenters\RouteCommenter(),
+        new Spatie\SqlCommenter\Commenters\JobCommenter(includeNamespace: false),
+        new Spatie\SqlCommenter\Commenters\DbDriverCommenter(),
+        // new Spatie\SqlCommenter\Commenters\FileCommenter(backtraceLimit: 20),
+    ],
 
-    /**
-     * Log which controller & action the query originated in
-     * you can also enable logging of the full namespace
-     * of the controller
+    /*
+     * If you need fine-grained control over the logging, you can extend
+     * the SqlCommenter class and specify your custom class here
      */
-    'controller' => true,
-    'controller_namespace' => false,
-
-    /**
-     * Log which route the query originated in
-     */
-    'route' => true,
-
-    /**
-     * Log which job the query originated in
-     */
-    'job' => true,
-    'job_namespace' => false,
-
-    /**
-     * Log the db driver
-     */
-    'driver' => true,
-
-    /**
-     * Log the file and line number of the call
-     */
-    'file' => false,
-    'backtrace_limit' => 20,
+    'commenter_class' => Spatie\SqlCommenter\SqlCommenter::class,
 ];
+
 ```
 
 ## Usage
 
-Configure which things you want to add to the SqlComments in the config file. After that, everything should work as expected.
+With the package installed, comments are automatically added. By publishing the config file, you can choose which things are added to the comments.
 
-If you want to add other arbitrary tags to the SqlComment, you can use the `addTag` method:
+### Adding arbitrary comments
+
+If you want to add other arbitrary comments to the SqlComment, you can use the `addComment` method. The given comment will be added to the next performed query.
 
 ```php
 use Spatie\SqlCommenter\SqlCommenter;
@@ -101,6 +86,28 @@ use Spatie\SqlCommenter\SqlCommenter;
 SqlCommenter::addComment('foo', 'bar');
 
 // select * from "users"/*foo='bar'*/;
+```
+
+### Adding you own commentator
+
+If you want to add a comment to all performed queries, you can create your own `Commentator` class. It should implement the `Spatie\SqlCommenter\Commenters\Commenter` interface. The `comments` function should run a single or an array of `Spatie\SqlCommenter\Comment`.
+
+Here's an example:
+
+```php
+namespace App\Support\SqlCommenters;
+
+use Illuminate\Database\Connection;
+use Spatie\SqlCommenter\Comment;
+
+class MyCustomCommenter implements Commenter
+{
+    /** @return Comment|array<Comment>|null */
+    public function comments(string $query, Connection $connection): Comment|array|null
+    {
+        return new Comment('my-custom-key',  'my-custom-value');
+    }
+}
 ```
 
 ## Testing
@@ -123,7 +130,8 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
-- [Rias](https://github.com/riasvdv)
+- [Rias Van der Veken](https://github.com/riasvdv)
+- [Freek Van der Herten](https://github.com/freekmurze)
 - [All Contributors](../../contributors)
 
 ## License

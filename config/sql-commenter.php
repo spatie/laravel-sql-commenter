@@ -1,38 +1,21 @@
 <?php
 
 return [
-    /**
-     * Log the Laravel framework's version
+    /*
+     * These classes add comments to an executed query.
      */
-    'framework' => true,
+    'commenters' => [
+        new Spatie\SqlCommenter\Commenters\FrameworkVersionCommenter(),
+        new Spatie\SqlCommenter\Commenters\ControllerCommenter(includeNamespace: false),
+        new Spatie\SqlCommenter\Commenters\RouteCommenter(),
+        new Spatie\SqlCommenter\Commenters\JobCommenter(includeNamespace: false),
+        new Spatie\SqlCommenter\Commenters\DbDriverCommenter(),
+        // new Spatie\SqlCommenter\Commenters\FileCommenter(backtraceLimit: 20),
+    ],
 
-    /**
-     * Log which controller & action the query originated in
-     * you can also enable logging of the full namespace
-     * of the controller
+    /*
+     * If you need fine-grained control over the logging, you can extend
+     * the SqlCommenter class and specify your custom class here
      */
-    'controller' => true,
-    'controller_namespace' => false,
-
-    /**
-     * Log which route the query originated in
-     */
-    'route' => true,
-
-    /**
-     * Log which job the query originated in
-     */
-    'job' => true,
-    'job_namespace' => false,
-
-    /**
-     * Log the db driver
-     */
-    'driver' => true,
-
-    /**
-     * Log the file and line number of the call
-     */
-    'file' => false,
-    'backtrace_limit' => 20,
+    'commenter_class' => Spatie\SqlCommenter\SqlCommenter::class,
 ];
