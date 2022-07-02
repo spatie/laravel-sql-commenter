@@ -39,7 +39,7 @@ class SqlCommenter
 
     protected function shouldAddComments(string $query, Connection $connection): bool
     {
-        return true;
+        return config('sql-commenter.enabled');
     }
 
     /**

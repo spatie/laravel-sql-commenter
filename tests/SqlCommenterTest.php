@@ -7,6 +7,7 @@ use Spatie\SqlCommenter\Exceptions\InvalidSqlCommenter;
 use Spatie\SqlCommenter\SqlCommenter;
 use Spatie\SqlCommenter\Tests\TestSupport\TestClasses\CustomCommenter;
 use Spatie\SqlCommenter\Tests\TestSupport\TestClasses\InvalidCustomCommenter;
+use Spatie\SqlCommenter\Tests\TestSupport\TestClasses\User;
 use Spatie\SqlCommenter\Tests\TestSupport\TestClasses\UsersJob;
 
 it('can add extra comments', function () {
@@ -46,3 +47,15 @@ it('will throw an exception when trying to use an invalid commenter class', func
 
     dispatch(new UsersJob());
 })->throws(InvalidSqlCommenter::class);
+
+it('can disable adding comments', function () {
+    config()->set('sql-commenter.enabled', false);
+
+    Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
+        $version = app()->version();
+
+        expect($event->sql)->not()->toContainComment('framework', "laravel-{$version}");
+    });
+
+    User::all();
+});

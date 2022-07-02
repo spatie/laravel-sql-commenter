@@ -2,6 +2,11 @@
 
 return [
     /*
+     * When set to true, comments will be added to all your queries
+     */
+    'enabled' => true,
+
+    /*
      * These classes add comments to an executed query.
      */
     'commenters' => [
