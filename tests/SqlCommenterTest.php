@@ -60,8 +60,8 @@ it('can disable adding comments via the config file', function () {
     User::all();
 });
 
-it('can has a method to disable adding comments', function() {
-   SqlCommenter::disable();
+it('can has a method to disable adding comments', function () {
+    SqlCommenter::disable();
 
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
         $version = app()->version();
@@ -72,7 +72,7 @@ it('can has a method to disable adding comments', function() {
     User::all();
 });
 
-it('can has a method to enable adding comments', function() {
+it('can has a method to enable adding comments', function () {
     config()->set('sql-commenter.enabled', false);
 
     SqlCommenter::enable();
