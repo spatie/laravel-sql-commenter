@@ -69,7 +69,6 @@ return [
      */
     'commenter_class' => Spatie\SqlCommenter\SqlCommenter::class,
 ];
-
 ```
 
 ## Usage
