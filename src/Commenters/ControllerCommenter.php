@@ -30,7 +30,7 @@ class ControllerCommenter implements Commenter
 
     /**
      * @return array{
-     *            0: string,
+     *            0: class-string,
      *            1: string,
      *         }
      */
