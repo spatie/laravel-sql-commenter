@@ -12,11 +12,11 @@ class JobCommenter implements Commenter
     {
     }
 
-    /** @return Comment|array<Comment> */
-    public function comments(string $query, Connection $connection): Comment|array
+    /** @return Comment|array<Comment>|null */
+    public function comments(string $query, Connection $connection): Comment|array|null
     {
         if (! app()->runningInConsole()) {
-            return [];
+            return null;
         }
 
         /** @phpstan-ignore-next-line */

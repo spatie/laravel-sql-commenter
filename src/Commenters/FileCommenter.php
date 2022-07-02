@@ -14,8 +14,8 @@ class FileCommenter implements Commenter
     ) {
     }
 
-    /** @return Comment|array<Comment> */
-    public function comments(string $query, Connection $connection): Comment|array
+    /** @return Comment|array<Comment>|null */
+    public function comments(string $query, Connection $connection): Comment|array|null
     {
         $backtrace = new Backtrace();
 
@@ -39,7 +39,7 @@ class FileCommenter implements Commenter
             });
 
         if (! $frame) {
-            return [];
+            return null;
         }
 
         return [
