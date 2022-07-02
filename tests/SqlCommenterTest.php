@@ -5,8 +5,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Spatie\SqlCommenter\Commenters\FileCommenter;
+use Spatie\SqlCommenter\Exceptions\InvalidSqlCommenter;
 use Spatie\SqlCommenter\SqlCommenter;
 use Spatie\SqlCommenter\Tests\TestSupport\TestClasses\CustomCommenter;
+use Spatie\SqlCommenter\Tests\TestSupport\TestClasses\InvalidCustomCommenter;
 use Spatie\SqlCommenter\Tests\TestSupport\TestClasses\User;
 use Spatie\SqlCommenter\Tests\TestSupport\TestClasses\UsersController;
 use Spatie\SqlCommenter\Tests\TestSupport\TestClasses\UsersJob;
@@ -135,3 +137,9 @@ it('can use a custom commenter class', function () {
 
     dispatch(new UsersJob());
 });
+
+it('will throw an exception when trying to use an invalid commenter class', function () {
+    config()->set('sql-commenter.commenter_class', InvalidCustomCommenter::class);
+
+    dispatch(new UsersJob());
+})->throws(InvalidSqlCommenter::class);

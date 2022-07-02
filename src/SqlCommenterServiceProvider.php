@@ -5,6 +5,7 @@ namespace Spatie\SqlCommenter;
 use Illuminate\Database\Connection;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
+use Spatie\SqlCommenter\Exceptions\InvalidSqlCommenter;
 
 class SqlCommenterServiceProvider extends PackageServiceProvider
 {
@@ -19,6 +20,10 @@ class SqlCommenterServiceProvider extends PackageServiceProvider
     {
         $this->app->singleton(SqlCommenter::class, function () {
             $commenterClass = config('sql-commenter.commenter_class');
+
+            if (! is_a($commenterClass, SqlCommenter::class, true)) {
+                throw InvalidSqlCommenter::make($commenterClass);
+            }
 
             return new $commenterClass();
         });
