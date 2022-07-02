@@ -23,8 +23,8 @@ class ControllerCommenter implements Commenter
         [$controller, $action] = $this->getControllerAndAction();
 
         return [
-            new Comment('controller', $controller),
-            new Comment('action', $action),
+            Comment::make('controller', $controller),
+            Comment::make('action', $action),
         ];
     }
 

@@ -11,8 +11,8 @@ class RouteCommenter implements Commenter
     public function comments(string $query, Connection $connection): Comment|array|null
     {
         return [
-            new Comment('url', request()->getPathInfo()),
-            new Comment('route', request()->route()?->getName()),
+            Comment::make('url', request()->getPathInfo()),
+            Comment::make('route', request()->route()?->getName()),
         ];
     }
 }

@@ -43,8 +43,8 @@ class FileCommenter implements Commenter
         }
 
         return [
-            new Comment('file', $frame->file),
-            new Comment('line', $frame->lineNumber),
+            Comment::make('file', $frame->file),
+            Comment::make('line', $frame->lineNumber),
         ];
     }
 }

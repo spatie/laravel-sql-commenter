@@ -33,6 +33,6 @@ class JobCommenter implements Commenter
             ? $job::class
             : class_basename($job);
 
-        return new Comment('job', $job);
+        return Comment::make('job', $job);
     }
 }

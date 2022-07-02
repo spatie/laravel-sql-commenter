@@ -15,7 +15,7 @@ class SqlCommenter
 
     public static function addComment(string $key, ?string $value): void
     {
-        static::$extraComments[$key] = new Comment($key, $value);
+        static::$extraComments[$key] = Comment::make($key, $value);
     }
 
     public function commentQuery(string $query, Connection $connection, array $commenters): string
