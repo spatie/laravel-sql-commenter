@@ -5,6 +5,7 @@ namespace Spatie\SqlCommenter\Commenters;
 use Illuminate\Bus\Dispatcher;
 use Illuminate\Database\Connection;
 use Spatie\SqlCommenter\Comment;
+use Throwable;
 
 class JobCommenter implements Commenter
 {
@@ -19,10 +20,14 @@ class JobCommenter implements Commenter
             return null;
         }
 
-        /** @phpstan-ignore-next-line */
-        $pipeline = invade(app(Dispatcher::class))->pipeline;
-        /** @phpstan-ignore-next-line */
-        $job = invade($pipeline)->passable;
+        try {
+            /** @phpstan-ignore-next-line */
+            $pipeline = invade(app(Dispatcher::class))->pipeline;
+            /** @phpstan-ignore-next-line */
+            $job = invade($pipeline)->passable;
+        } catch (Throwable) {
+            return null;
+        }
 
         $job = $this->includeNamespace
             ? $job::class
