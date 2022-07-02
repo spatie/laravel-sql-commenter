@@ -27,11 +27,11 @@ class FileCommenter implements Commenter
                     return false;
                 }
 
-                if (str_contains($frame->file, 'laravel/framework')) {
+                if (str_contains($frame->file, str_replace('/', DIRECTORY_SEPARATOR, '/laravel/framework/'))) {
                     return false;
                 }
 
-                if (str_contains($frame->file, 'laravel-sql-commenter/src')) {
+                if (str_contains($frame->file, str_replace('/', DIRECTORY_SEPARATOR, '/laravel-sql-commenter/src/'))) {
                     return false;
                 }
 
