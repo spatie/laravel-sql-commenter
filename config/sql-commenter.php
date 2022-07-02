@@ -8,6 +8,9 @@ use Spatie\SqlCommenter\Commenters\RouteCommenter;
 use Spatie\SqlCommenter\SqlCommenter;
 
 return [
+    /*
+     * These classes add comments to an executed query.
+     */
     'commenters' => [
         new FrameworkVersionCommenter(),
         new ControllerCommenter(includeNamespace: false),
@@ -18,8 +21,8 @@ return [
     ],
 
     /*
-     * If you need fine-grained control over the logging, you can extend the
-     * SqlCommenter class and specify your custom class here.
+     * If you need fine-grained control over the logging, you can extend
+     * the SqlCommenter class and specify your custom class here
      */
     'commenter_class' => SqlCommenter::class,
 ];
