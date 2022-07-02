@@ -10,14 +10,13 @@
 
 This package can add comments to queries perform by Laravel. These comments will use the [sqlformatter](https://google.github.io/sqlcommenter/) format, which is understood by various tools and services, such as [PlanetScale's Query Insights](https://docs.planetscale.com/concepts/query-insights).
 
-
 Here's how a query looks by default:
 
 ```mysql
 select * from users
 ```
 
-Using this package, comments like this one will be added.
+Using this package, comments that like this one will be added.
 
 ```mysql
 select * from "users"/*controller='UsersController',action='index'*/;
@@ -48,60 +47,38 @@ Optionally, you can publish the config file with:
 php artisan vendor:publish --tag="sql-commenter-config"
 ```
 
-This is the contents of the published config file:
+This is the content of the published config file:
 
 ```php
 return [
     /*
-     * Log the Laravel framework's version
+     * These classes add comments to an executed query.
      */
-    'framework' => true,
+    'commenters' => [
+        new Spatie\SqlCommenter\Commenters\FrameworkVersionCommenter(),
+        new Spatie\SqlCommenter\Commenters\ControllerCommenter(includeNamespace: false),
+        new Spatie\SqlCommenter\Commenters\RouteCommenter(),
+        new Spatie\SqlCommenter\Commenters\JobCommenter(includeNamespace: false),
+        new Spatie\SqlCommenter\Commenters\DbDriverCommenter(),
+        // new Spatie\SqlCommenter\Commenters\FileCommenter(backtraceLimit: 20),
+    ],
 
     /*
-     * Log which controller & action the query originated in
-     * you can also enable logging of the full namespace
-     * of the controller
+     * If you need fine-grained control over the logging, you can extend
+     * the SqlCommenter class and specify your custom class here
      */
-    'controller' => true,
-    'controller_namespace' => false,
-
-    /*
-     * Log which route the query originated in
-     */
-    'route' => true,
-
-    /*
-     * Log which job the query originated in
-     */
-    'job' => true,
-    'job_namespace' => false,
-
-    /*
-     * Log the db driver
-     */
-    'driver' => true,
-
-    /*
-     * Log the file and line number of the call
-     */
-    'file' => false,
-    'backtrace_limit' => 20,
-
-    /*
-     * If you need fine-grained control over the logging, you can extend the
-     * SqlCommenter class and specify your custom class here.
-     */
-    'commenter_class' => SqlCommenter::class,
+    'commenter_class' => Spatie\SqlCommenter\SqlCommenter::class,
 ];
+
 ```
 
 ## Usage
 
-With the package installed, comments are automatically added. By publishing the config file, you can choose which things so be added to the comments.
+With the package installed, comments are automatically added. By publishing the config file, you can choose which things are added to the comments.
 
 ### Adding arbitrary comments
 
-If you want to add other arbitrary tags to the SqlComment, you can use the `addTag` method:
+If you want to add other arbitrary comments to the SqlComment, you can use the `addComment` method. The given comment will be added to the next performed query.
 
 ```php
 use Spatie\SqlCommenter\SqlCommenter;
@@ -111,8 +88,27 @@ SqlCommenter::addComment('foo', 'bar');
 // select * from "users"/*foo='bar'*/;
 ```
 
-##
+### Adding you own commentator
 
+If you want to add a comment to all performed queries, you can create your own `Commentator` class. It should implement the `Spatie\SqlCommenter\Commenters\Commenter` interface. The `comments` function should run a single or an array of `Spatie\SqlCommenter\Comment`.
+
+Here's an example:
+
+```php
+namespace App\Support\SqlCommenters;
+
+use Illuminate\Database\Connection;
+use Spatie\SqlCommenter\Comment;
+
+class MyCustomCommenter implements Commenter
+{
+    /** @return Comment|array<Comment>|null */
+    public function comments(string $query, Connection $connection): Comment|array|null
+    {
+        return new Comment('my-custom-key',  'my-custom-value');
+    }
+}
+```
 
 ## Testing
 
