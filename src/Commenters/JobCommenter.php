@@ -29,9 +29,13 @@ class JobCommenter implements Commenter
             return null;
         }
 
-        $job = $this->includeNamespace
-            ? $job::class
-            : class_basename($job);
+        if ($job) {
+            $job = $job::class;
+
+            if (! $this->includeNamespace) {
+                $job = class_basename($job);
+            }
+        }
 
         return Comment::make('job', $job);
     }
