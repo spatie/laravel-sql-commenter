@@ -1,6 +1,6 @@
 {
     "name": "spatie/laravel-sql-commenter",
-    "description": "Augment your Laravel queries with comments in SqlCommenter format",
+    "description": "Add comments to SQL queries made by Laravel",
     "keywords": [
         "spatie",
         "laravel",
@@ -26,20 +26,20 @@
         "illuminate/contracts": "^9.0",
         "spatie/backtrace": "^1.2",
         "spatie/invade": "^1.0",
-        "spatie/laravel-package-tools": "^1.9.2"
+        "spatie/laravel-package-tools": "^1.12"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.8",
-        "nunomaduro/collision": "^6.0",
-        "nunomaduro/larastan": "^2.0.1",
-        "orchestra/testbench": "^7.0",
+        "nunomaduro/collision": "^6.2",
+        "nunomaduro/larastan": "^2.1",
+        "orchestra/testbench": "^7.6",
         "pestphp/pest": "^1.21",
-        "pestphp/pest-plugin-laravel": "^1.1",
+        "pestphp/pest-plugin-laravel": "^1.2",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan-deprecation-rules": "^1.0",
-        "phpstan/phpstan-phpunit": "^1.0",
+        "phpstan/phpstan-phpunit": "^1.1",
         "phpunit/phpunit": "^9.5",
-        "spatie/laravel-ray": "^1.26"
+        "spatie/laravel-ray": "^1.29"
     },
     "autoload": {
         "psr-4": {
