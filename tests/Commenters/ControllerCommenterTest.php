@@ -4,6 +4,7 @@ use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
+use Spatie\SqlCommenter\Commenters\ControllerCommenter;
 use Spatie\SqlCommenter\Tests\TestSupport\TestClasses\UsersController;
 
 it('logs the controller and action with an invokable controller', function () {
@@ -29,6 +30,22 @@ it('logs the controller and action with a controller method', function () {
 
     $this->get('/users');
 });
+
+it('can log the fully qualified controller class name', function () {
+    config()->set('sql-commenter.commenters', [new ControllerCommenter(includeNamespace: true)]);
+
+
+    Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
+        expect($event->sql)
+            ->toContainComment('controller', UsersController::class)
+            ->toContainComment('action', 'index');
+    });
+
+    Route::get('/users', [UsersController::class, 'index']);
+
+    $this->get('/users');
+});
+
 
 it('logs the controller and action with a closure', function () {
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
