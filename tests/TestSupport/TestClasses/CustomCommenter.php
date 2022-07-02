@@ -2,14 +2,16 @@
 
 namespace Spatie\SqlCommenter\Tests\TestSupport\TestClasses;
 
+use Illuminate\Support\Collection;
+use Spatie\SqlCommenter\Comment;
 use Spatie\SqlCommenter\SqlCommenter;
 
 class CustomCommenter extends SqlCommenter
 {
-    protected function getCommenters(array $commenters): array
+    protected function addExtraComments(Collection $comments): void
     {
-        static::addComment('framework', "spatie-framework");
+        parent::addExtraComments($comments);
 
-        return $commenters;
+        $comments->push(Comment::make('framework', 'spatie-framework'));
     }
 }
