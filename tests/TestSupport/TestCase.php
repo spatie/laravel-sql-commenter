@@ -5,7 +5,6 @@ namespace Spatie\SqlCommenter\Tests\TestSupport;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Spatie\SqlCommenter\SqlCommenterServiceProvider;
-use const Spatie\SqlCommenter\Tests\__DIR__;
 
 class TestCase extends Orchestra
 {
