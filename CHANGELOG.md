@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-sql-commenter` will be documented in this file.
 
+## 1.0.0 - 2022-07-02
+
+- initial release
+
 ## 0.0.3 - 2022-07-02
 
 - experimental release
