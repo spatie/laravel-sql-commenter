@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Route;
 
 it('logs the route name and url', function () {
     config()->set('sql-commenter.route', true);
