@@ -13,11 +13,6 @@ class SqlCommenter
     /** @var array<Comment> */
     protected static array $extraComments = [];
 
-    public static function addComment(string $key, ?string $value): void
-    {
-        static::$extraComments[$key] = Comment::make($key, $value);
-    }
-
     public function commentQuery(string $query, Connection $connection, array $commenters): string
     {
         if (! $this->shouldAddComments($query, $connection)) {
@@ -104,5 +99,20 @@ class SqlCommenter
         }
 
         return $query . Comment::formatCollection($comments);
+    }
+
+    public static function addComment(string $key, ?string $value): void
+    {
+        static::$extraComments[$key] = Comment::make($key, $value);
+    }
+
+    public static function enable(): void
+    {
+        config()->set('sql-commenter.enabled', true);
+    }
+
+    public static function disable(): void
+    {
+        config()->set('sql-commenter.enabled', false);
     }
 }

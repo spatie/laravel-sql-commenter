@@ -52,6 +52,11 @@ This is the content of the published config file:
 ```php
 return [
     /*
+     * When set to true, comments will be added to all your queries
+     */
+    'enabled' => true,
+
+    /*
      * These classes add comments to an executed query.
      */
     'commenters' => [
@@ -85,6 +90,26 @@ use Spatie\SqlCommenter\SqlCommenter;
 SqlCommenter::addComment('foo', 'bar');
 
 // select * from "users"/*foo='bar'*/;
+```
+
+### Dynamically enabling and disabling adding comments
+
+You can dynamically enable and disable query logging. 
+
+Let's assume that you only want to add comments for a certain part in your code base. First, you would need to set the value of the `enabled` key in the `sql-commenter` config file to `false`. This will stop the package from adding comments to all queries. Right before the part where you want to add comments, call `SqlCommenter::enable()` and at the end call `SqlCommenter::disable()`
+
+```php
+use \Spatie\SqlCommenter\SqlCommenter;
+
+// queries performed here won't have comments
+
+SqlCommenter::enable();
+
+// queries performed here will have comments
+
+SqlCommenter::disable();
+
+// queries performed here won't have comments
 ```
 
 ### Adding you own commentator

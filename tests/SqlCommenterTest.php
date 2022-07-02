@@ -48,13 +48,39 @@ it('will throw an exception when trying to use an invalid commenter class', func
     dispatch(new UsersJob());
 })->throws(InvalidSqlCommenter::class);
 
-it('can disable adding comments', function () {
+it('can disable adding comments via the config file', function () {
     config()->set('sql-commenter.enabled', false);
 
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
         $version = app()->version();
 
         expect($event->sql)->not()->toContainComment('framework', "laravel-{$version}");
+    });
+
+    User::all();
+});
+
+it('can has a method to disable adding comments', function() {
+   SqlCommenter::disable();
+
+    Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
+        $version = app()->version();
+
+        expect($event->sql)->not()->toContainComment('framework', "laravel-{$version}");
+    });
+
+    User::all();
+});
+
+it('can has a method to enable adding comments', function() {
+    config()->set('sql-commenter.enabled', false);
+
+    SqlCommenter::enable();
+
+    Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
+        $version = app()->version();
+
+        expect($event->sql)->toContainComment('framework', "laravel-{$version}");
     });
 
     User::all();
