@@ -4,33 +4,14 @@ use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
-use Spatie\SqlCommenter\Comment;
 use Spatie\SqlCommenter\Commenters\FileCommenter;
 use Spatie\SqlCommenter\SqlCommenter;
-use Spatie\SqlCommenter\Tests\TestClasses\CustomCommenter;
-use Spatie\SqlCommenter\Tests\TestClasses\User;
-use Spatie\SqlCommenter\Tests\TestClasses\UsersController;
-use Spatie\SqlCommenter\Tests\TestClasses\UsersJob;
+use Spatie\SqlCommenter\Tests\TestSupport\TestClasses\CustomCommenter;
+use Spatie\SqlCommenter\Tests\TestSupport\TestClasses\User;
+use Spatie\SqlCommenter\Tests\TestSupport\TestClasses\UsersController;
+use Spatie\SqlCommenter\Tests\TestSupport\TestClasses\UsersJob;
 
-it('formats comments with keys', function () {
-    $comments = collect([
-        Comment::make('key1', 'value1'),
-        Comment::make('key2', 'value2'),
-    ]);
-
-    expect(Comment::formatCollection($comments))->toBe("/*key1='value1',key2='value2'*/");
-});
-
-it('formats comments with special characters', function () {
-    $comments = collect([
-        Comment::make('key1', 'value1@'),
-        Comment::make('key2', 'value2'),
-    ]);
-
-    expect(Comment::formatCollection($comments))->toBe("/*key1='value1%40',key2='value2'*/");
-});
-
-it('logs the framework version if enabled', function () {
+it('logs the framework version', function () {
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
         $version = app()->version();
 
@@ -107,7 +88,7 @@ it('logs the file it originated in', function () {
 
 
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
-        expect($event->sql)->toContainComment('file', __DIR__ . '/TestClasses/UsersJob.php');
+        expect($event->sql)->toContainComment('file', __DIR__ . '/TestSupport/TestClasses/UsersJob.php');
     });
 
     dispatch(new UsersJob());
@@ -124,20 +105,18 @@ it('logs the file it originated in with eloquent', function () {
 });
 
 it('can add extra comments', function () {
-
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
         expect($event->sql)->toContainComment('foo', 'bar');
     });
 
-   SqlCommenter::addComment('foo', 'bar');
+    SqlCommenter::addComment('foo', 'bar');
 
     dispatch(new UsersJob());
 });
 
 it('will not add comments if there already are comments', function () {
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
-        expect($event->sql)
-            ->not()->toContainComment('foo', 'bar');
+        expect($event->sql)->not()->toContainComment('foo', 'bar');
     });
 
     SqlCommenter::addComment('foo', 'bar');

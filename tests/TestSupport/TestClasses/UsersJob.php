@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\SqlCommenter\Tests\TestClasses;
+namespace Spatie\SqlCommenter\Tests\TestSupport\TestClasses;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

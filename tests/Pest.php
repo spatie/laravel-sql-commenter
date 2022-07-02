@@ -1,7 +1,7 @@
 <?php
 
 use Spatie\SqlCommenter\Comment;
-use Spatie\SqlCommenter\Tests\TestCase;
+use Spatie\SqlCommenter\Tests\TestSupport\TestCase;
 
 uses(TestCase::class)->in(__DIR__);
 
