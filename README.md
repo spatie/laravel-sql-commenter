@@ -8,15 +8,15 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/spatie/laravel-sql-commenter/Check%20&%20fix%20styling?label=code%20style)](https://github.com/spatie/laravel-sql-commenter/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-sql-commenter.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-sql-commenter)
 
-This package can add comments to queries performed by Laravel. These comments will use the [sqlformatter](https://google.github.io/sqlcommenter/) format, which is understood by various tools and services, such as [PlanetScale's Query Insights](https://docs.planetscale.com/concepts/query-insights).
+This package can add comments to queries performed by Laravel. These comments will use the [sqlcommenter](https://google.github.io/sqlcommenter/) format, which is understood by various tools and services, such as [PlanetScale's Query Insights](https://docs.planetscale.com/concepts/query-insights).
 
-Here's how a query looks by default:
+Here's what a query looks like by default:
 
 ```mysql
 select * from users
 ```
 
-Using this package, comments that like this one will be added.
+Using this package, comments like this one will be added.
 
 ```mysql
 select * from "users"/*controller='UsersController',action='index'*/;
@@ -90,7 +90,7 @@ SqlCommenter::addComment('foo', 'bar');
 
 ### Adding you own commentator
 
-If you want to add a comment to all performed queries, you can create your own `Commentator` class. It should implement the `Spatie\SqlCommenter\Commenters\Commenter` interface. The `comments` function should run a single or an array of `Spatie\SqlCommenter\Comment`.
+If you want to add a comment to all performed queries, you can create your own `Commentator` class. It should implement the `Spatie\SqlCommenter\Commenters\Commenter` interface. The `comments` function should return a single or an array of `Spatie\SqlCommenter\Comment`.
 
 Here's an example:
 
