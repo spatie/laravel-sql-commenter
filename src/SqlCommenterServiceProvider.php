@@ -21,7 +21,7 @@ class SqlCommenterServiceProvider extends PackageServiceProvider
         $this->app->singleton(SqlCommenter::class, function () {
             $commenterClass = config('sql-commenter.commenter_class');
 
-            if (!is_a($commenterClass, SqlCommenter::class, true)) {
+            if (! is_a($commenterClass, SqlCommenter::class, true)) {
                 throw InvalidSqlCommenter::make($commenterClass);
             }
 
