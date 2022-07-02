@@ -16,7 +16,7 @@ class ControllerCommenter implements Commenter
     /** @return Comment|array<Comment>|null */
     public function comments(string $query, Connection $connection): Comment|array|null
     {
-        if (!request()->route()) {
+        if (! request()->route()) {
             return null;
         }
 
