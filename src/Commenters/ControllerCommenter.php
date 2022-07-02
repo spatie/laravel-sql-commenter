@@ -13,7 +13,7 @@ class ControllerCommenter implements Commenter
     {
     }
 
-    /** @return Comment|array<Comment>|null */
+    /** @return Comment|Comment[]|null */
     public function comments(string $query, Connection $connection): Comment|array|null
     {
         if (! request()->route()) {
@@ -30,9 +30,9 @@ class ControllerCommenter implements Commenter
 
     /**
      * @return array{
-     *            0: class-string,
-     *            1: string,
-     *         }
+     *     0: class-string,
+     *     1: string,
+     * }
      */
     protected function getControllerAndAction(): array
     {

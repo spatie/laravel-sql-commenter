@@ -25,11 +25,11 @@ class Comment implements Stringable
 
         $commentsAsString = $comments
             ->map(fn (Comment $comment) => (string)$comment)
-            ->join("',");
+            ->join(",");
 
         return str($commentsAsString)
             ->prepend('/*')
-            ->append("'*/");
+            ->append("*/");
     }
 
     public function __construct(
@@ -40,6 +40,6 @@ class Comment implements Stringable
 
     public function __toString(): string
     {
-        return urlencode($this->key) . "=" . "'" . urlencode($this->value);
+        return urlencode($this->key) . "=" . "'" . urlencode($this->value) . "'";
     }
 }

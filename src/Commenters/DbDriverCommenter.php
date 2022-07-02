@@ -7,7 +7,7 @@ use Spatie\SqlCommenter\Comment;
 
 class DbDriverCommenter implements Commenter
 {
-    /** @return Comment|array<Comment>|null */
+    /** @return Comment|Comment[]|null */
     public function comments(string $query, Connection $connection): Comment|array|null
     {
         return Comment::make('db_driver', $connection->getConfig('driver'));
