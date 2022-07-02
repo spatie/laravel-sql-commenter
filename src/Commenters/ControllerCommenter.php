@@ -46,9 +46,11 @@ class ControllerCommenter implements Commenter
             return [$controller, $action];
         }
 
-        $controller = $this->includeNamespace
-            ? explode('@', $action)[0] ?? null
-            : class_basename(explode('@', $action)[0]);
+        $controller = explode('@', $action)[0] ?? null;
+
+        if (! $this->includeNamespace) {
+            $controller = class_basename($controller);
+        }
 
         $action = explode('@', $action)[1] ?? null;
 
