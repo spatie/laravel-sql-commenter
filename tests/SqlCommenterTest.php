@@ -130,7 +130,7 @@ it('can use a custom commenter class', function () {
     config()->set('sql-commenter.commenter_class', CustomCommenter::class);
 
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
-        expect($event->sql)->toContain(CustomCommenter::formatComment('framework', 'spatie-framework'));
+        expect($event->sql)->toContainComment('framework', 'spatie-framework');
     });
 
     dispatch(new UsersJob());

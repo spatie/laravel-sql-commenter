@@ -24,12 +24,23 @@ class SqlCommenter
             return $query;
         }
 
+        $commenters = $this->getCommenters($commenters);
+
         $comments = $this->getCommentsFromCommenters($commenters, $connection, $query);
 
-        $comments->push(...self::$extraComments);
-        self::$extraComments = [];
+        $this->addExtraComments($comments);
 
         return $this->addCommentsToQuery($query, $comments);
+    }
+
+    /**
+     * @param array<Commenter> $commenters
+     *
+     * @return array<Commenter>
+     */
+    protected function getCommenters(array $commenters): array
+    {
+        return $commenters;
     }
 
     /**
@@ -51,6 +62,18 @@ class SqlCommenter
                 return Arr::wrap($comments);
             })
             ->filter();
+    }
+
+    /**
+     * @param Collection<Comment> $comments
+     *
+     * @return void
+     */
+    protected function addExtraComments(Collection $comments): void
+    {
+        $comments->push(...self::$extraComments);
+
+        self::$extraComments = [];
     }
 
     /**

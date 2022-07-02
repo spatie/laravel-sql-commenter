@@ -6,8 +6,10 @@ use Spatie\SqlCommenter\SqlCommenter;
 
 class CustomCommenter extends SqlCommenter
 {
-    protected static function addFrameworkVersion(): void
+    protected function getCommenters(array $commenters): array
     {
         static::addComment('framework', "spatie-framework");
+
+        return $commenters;
     }
 }
