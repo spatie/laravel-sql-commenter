@@ -10,7 +10,7 @@ use Spatie\SqlCommenter\Comment;
 class FileCommenter implements Commenter
 {
     public function __construct(
-        public int $backtraceLimit = 20
+        public int $backtraceLimit = 40
     ) {
     }
 

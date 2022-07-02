@@ -20,25 +20,36 @@ class SqlCommenter
 
     public function commentQuery(string $query, Connection $connection, array $commenters): string
     {
+        if (! $this->shouldAddComments($query, $connection)) {
+            return $query;
+        }
+
         if (str_contains($query, '/*')) {
             return $query;
         }
 
-        $commenters = $this->getCommenters($commenters);
+        $commenters = $this->getCommenters($query, $connection, $commenters);
 
         $comments = $this->getCommentsFromCommenters($commenters, $connection, $query);
 
-        $this->addExtraComments($comments);
+        $this->addExtraComments($comments, $query, $connection);
 
         return $this->addCommentsToQuery($query, $comments);
     }
 
+    protected function shouldAddComments(string $query, Connection $connection): bool
+    {
+        return true;
+    }
+
     /**
+     * @param string $query
+     * @param Connection $connection
      * @param array<Commenter> $commenters
      *
      * @return array<Commenter>
      */
-    protected function getCommenters(array $commenters): array
+    protected function getCommenters(string $query, Connection $connection, array $commenters): array
     {
         return $commenters;
     }
@@ -66,10 +77,12 @@ class SqlCommenter
 
     /**
      * @param Collection<Comment> $comments
+     * @param string $query
+     * @param Connection $connection
      *
      * @return void
      */
-    protected function addExtraComments(Collection $comments): void
+    protected function addExtraComments(Collection $comments, string $query, Connection $connection): void
     {
         $comments->push(...self::$extraComments);
 
