@@ -10,12 +10,12 @@ return [
      * These classes add comments to an executed query.
      */
     'commenters' => [
-        new Spatie\SqlCommenter\Commenters\FrameworkVersionCommenter(),
-        new Spatie\SqlCommenter\Commenters\ControllerCommenter(includeNamespace: false),
-        new Spatie\SqlCommenter\Commenters\RouteCommenter(),
-        new Spatie\SqlCommenter\Commenters\JobCommenter(includeNamespace: false),
-        new Spatie\SqlCommenter\Commenters\DbDriverCommenter(),
-        // new Spatie\SqlCommenter\Commenters\FileCommenter(backtraceLimit: 20),
+        Spatie\SqlCommenter\Commenters\ControllerCommenter::class => ['includeNamespace' => false],
+        Spatie\SqlCommenter\Commenters\RouteCommenter::class,
+        Spatie\SqlCommenter\Commenters\JobCommenter::class => ['includeNamespace' => false],
+        Spatie\SqlCommenter\Commenters\FileCommenter::class => ['backtraceLimit' => 20],
+        // Spatie\SqlCommenter\Commenters\FrameworkVersionCommenter::class,
+        // Spatie\SqlCommenter\Commenters\DbDriverCommenter::class,
     ],
 
     /*

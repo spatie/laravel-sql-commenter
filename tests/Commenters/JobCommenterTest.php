@@ -16,7 +16,7 @@ it('logs the job it originated in', function () {
 });
 
 it('can log the fully qualified job class', function () {
-    config()->set('sql-commenter.commenters', [new JobCommenter(includeNamespace: true)]);
+    $this->addCommenterToConfig(JobCommenter::class, ['includeNamespace' => true]);
 
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
         expect($event->sql)->toContainComment('job', UsersJob::class);

@@ -3,6 +3,7 @@
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
+use Spatie\SqlCommenter\Commenters\FrameworkVersionCommenter;
 use Spatie\SqlCommenter\Exceptions\InvalidSqlCommenter;
 use Spatie\SqlCommenter\SqlCommenter;
 use Spatie\SqlCommenter\Tests\TestSupport\TestClasses\CustomCommenter;
@@ -72,8 +73,9 @@ it('can has a method to disable adding comments', function () {
     User::all();
 });
 
-it('can has a method to enable adding comments', function () {
+it('has a method to enable adding comments', function () {
     config()->set('sql-commenter.enabled', false);
+    $this->addCommenterToConfig(FrameworkVersionCommenter::class);
 
     SqlCommenter::enable();
 

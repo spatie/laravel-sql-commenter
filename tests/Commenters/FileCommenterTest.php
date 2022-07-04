@@ -9,7 +9,7 @@ use Spatie\SqlCommenter\Tests\TestSupport\TestClasses\User;
 use Spatie\SqlCommenter\Tests\TestSupport\TestClasses\UsersJob;
 
 it('logs the file it originated in', function () {
-    config()->set('sql-commenter.commenters', [new FileCommenter()]);
+    $this->addCommenterToConfig(FileCommenter::class);
 
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
         expect($event->sql)->toContainComment('file', realpath(__DIR__ . '/../TestSupport/TestClasses/UsersJob.php'));
@@ -19,7 +19,7 @@ it('logs the file it originated in', function () {
 });
 
 it('logs the file it originated in with eloquent', function () {
-    config()->set('sql-commenter.commenters', [new FileCommenter()]);
+    $this->addCommenterToConfig(FileCommenter::class);
 
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
         expect($event->sql)->toContainComment('file', __FILE__);

@@ -32,8 +32,7 @@ it('logs the controller and action with a controller method', function () {
 });
 
 it('can log the fully qualified controller class name', function () {
-    config()->set('sql-commenter.commenters', [new ControllerCommenter(includeNamespace: true)]);
-
+    $this->addCommenterToConfig(ControllerCommenter::class, ['includeNamespace' => true]);
 
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
         expect($event->sql)

@@ -29,6 +29,7 @@ class JobCommenter implements Commenter
         }
 
         if ($job) {
+
             $job = $job::class;
 
             if (! $this->includeNamespace) {
