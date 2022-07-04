@@ -2,8 +2,9 @@
 
 namespace Spatie\SqlCommenter\Tests\TestSupport\TestClasses;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as BaseUser;
 
-class User extends Model
+class User extends BaseUser
 {
+    public $guarded = [];
 }
