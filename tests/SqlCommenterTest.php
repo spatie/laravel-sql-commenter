@@ -87,3 +87,16 @@ it('has a method to enable adding comments', function () {
 
     User::all();
 });
+
+it('will not include empty comments', function() {
+    SqlCommenter::addComment('foo', 'bar');
+    SqlCommenter::addComment('baz', '');
+
+
+    Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
+        expect($event->sql)->toContainComment('foo', 'bar');
+        expect($event->sql)->not->toContainComment('baz', '');
+    });
+
+    User::all();
+});

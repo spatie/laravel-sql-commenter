@@ -13,6 +13,21 @@ class SqlCommenter
     /** @var array<Comment> */
     protected static array $extraComments = [];
 
+    public static function addComment(string $key, ?string $value): void
+    {
+        static::$extraComments[$key] = Comment::make($key, $value);
+    }
+
+    public static function enable(): void
+    {
+        config()->set('sql-commenter.enabled', true);
+    }
+
+    public static function disable(): void
+    {
+        config()->set('sql-commenter.enabled', false);
+    }
+
     public function commentQuery(string $query, Connection $connection, array $commenters): string
     {
         if (! $this->shouldAddComments($query, $connection)) {
@@ -28,6 +43,8 @@ class SqlCommenter
         $comments = $this->getCommentsFromCommenters($commenters, $connection, $query);
 
         $this->addExtraComments($comments, $query, $connection);
+
+        $comments = $this->filterEmptyComments($comments);
 
         return $this->addCommentsToQuery($query, $comments);
     }
@@ -101,18 +118,14 @@ class SqlCommenter
         return $query . Comment::formatCollection($comments);
     }
 
-    public static function addComment(string $key, ?string $value): void
-    {
-        static::$extraComments[$key] = Comment::make($key, $value);
-    }
 
-    public static function enable(): void
+    /**
+     * @param Collection<Comment> $comments
+     *
+     * @return Collection<Comment>
+     */
+    protected function filterEmptyComments(Collection $comments): Collection
     {
-        config()->set('sql-commenter.enabled', true);
-    }
-
-    public static function disable(): void
-    {
-        config()->set('sql-commenter.enabled', false);
+        return $comments->filter(fn(Comment $comment) => ! empty($comment->value));
     }
 }
