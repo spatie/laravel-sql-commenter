@@ -5,8 +5,8 @@ namespace Spatie\SqlCommenter;
 use Illuminate\Database\Connection;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Spatie\SqlCommenter\Exceptions\InvalidSqlCommenter;
 use Spatie\SqlCommenter\Commenters\Commenter;
+use Spatie\SqlCommenter\Exceptions\InvalidSqlCommenter;
 
 class SqlCommenterServiceProvider extends PackageServiceProvider
 {
@@ -22,7 +22,7 @@ class SqlCommenterServiceProvider extends PackageServiceProvider
         $this->app->singleton(SqlCommenter::class, function () {
             $commenterClass = config('sql-commenter.commenter_class');
 
-            if (!is_a($commenterClass, SqlCommenter::class, true)) {
+            if (! is_a($commenterClass, SqlCommenter::class, true)) {
                 throw InvalidSqlCommenter::make($commenterClass);
             }
 
@@ -52,7 +52,7 @@ class SqlCommenterServiceProvider extends PackageServiceProvider
     {
         return collect($commenterClasses)
             ->mapWithKeys(function (array|string $options, string $commenterClass) {
-                if (!is_array($options)) {
+                if (! is_array($options)) {
                     $commenterClass = $options;
 
                     $options = [];

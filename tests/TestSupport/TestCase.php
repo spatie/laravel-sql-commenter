@@ -4,7 +4,6 @@ namespace Spatie\SqlCommenter\Tests\TestSupport;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Spatie\SqlCommenter\Commenters\JobCommenter;
 use Spatie\SqlCommenter\SqlCommenterServiceProvider;
 
 class TestCase extends Orchestra
@@ -40,6 +39,5 @@ class TestCase extends Orchestra
         config()->set('sql-commenter.commenters', $commenters);
 
         return $this;
-
     }
 }
