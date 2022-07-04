@@ -64,6 +64,7 @@ return [
         Spatie\SqlCommenter\Commenters\RouteCommenter::class,
         Spatie\SqlCommenter\Commenters\JobCommenter::class => ['includeNamespace' => false],
         Spatie\SqlCommenter\Commenters\FileCommenter::class => ['backtraceLimit' => 20],
+        Spatie\SqlCommenter\Commenters\CurrentUserCommenter::class,
         // Spatie\SqlCommenter\Commenters\FrameworkVersionCommenter::class,
         // Spatie\SqlCommenter\Commenters\DbDriverCommenter::class,
     ],
