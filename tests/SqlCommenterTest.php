@@ -88,7 +88,7 @@ it('has a method to enable adding comments', function () {
     User::all();
 });
 
-it('will not include empty comments', function() {
+it('will not include empty comments', function () {
     SqlCommenter::addComment('foo', 'bar');
     SqlCommenter::addComment('baz', '');
 

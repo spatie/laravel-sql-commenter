@@ -118,7 +118,6 @@ class SqlCommenter
         return $query . Comment::formatCollection($comments);
     }
 
-
     /**
      * @param Collection<Comment> $comments
      *
@@ -126,6 +125,6 @@ class SqlCommenter
      */
     protected function filterEmptyComments(Collection $comments): Collection
     {
-        return $comments->filter(fn(Comment $comment) => ! empty($comment->value));
+        return $comments->filter(fn (Comment $comment) => ! empty($comment->value));
     }
 }
