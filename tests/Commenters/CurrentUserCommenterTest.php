@@ -7,8 +7,8 @@ use Spatie\SqlCommenter\Tests\TestSupport\TestClasses\User;
 it('logs the current user', function () {
     $user = User::create([
         'name' => 'John',
-       'password' => 'dummy',
-       'email' => 'johndoe@example.com',
+        'password' => 'dummy',
+        'email' => 'johndoe@example.com',
     ]);
 
     auth()->login($user);
