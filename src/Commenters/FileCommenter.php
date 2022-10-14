@@ -10,7 +10,8 @@ use Spatie\SqlCommenter\Comment;
 class FileCommenter implements Commenter
 {
     public function __construct(
-        public int $backtraceLimit = 40
+        public int $backtraceLimit = 40,
+        public array $excludePathSegments = [],
     ) {
     }
 
@@ -27,10 +28,10 @@ class FileCommenter implements Commenter
                     return false;
                 }
 
-                $ignoredPathSegments = [
+                $ignoredPathSegments = array_merge([
                     'laravel-sql-commenter/src',
                     'laravel/framework',
-                ];
+                ], $this->excludePathSegments);
 
                 foreach ($ignoredPathSegments as $ignoredPathSegment) {
                     $segment = str_replace('/', DIRECTORY_SEPARATOR, "/{$ignoredPathSegment}/");
