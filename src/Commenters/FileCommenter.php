@@ -50,11 +50,12 @@ class FileCommenter implements Commenter
             return null;
         }
 
+        $filePath = $this->useRelativePath && str_starts_with($frame->file, base_path())
+            ? substr($frame->file, strlen(base_path()) + 1)
+            : $frame->file;
+
         return [
-            Comment::make('file', $this->useRelativePath && strpos($frame->file, base_path()) === 0
-                ? substr($frame->file, strlen(base_path()) + 1)
-                : $frame->file
-            ),
+            Comment::make('file', $filePath),
             Comment::make('line', $frame->lineNumber),
         ];
     }
