@@ -10,9 +10,11 @@ use Spatie\SqlCommenter\Comment;
 class FileCommenter implements Commenter
 {
     public function __construct(
-        public int $backtraceLimit = 40,
+        public int   $backtraceLimit = 40,
         public array $excludePathSegments = [],
-    ) {
+        public bool  $useRelativePath = false,
+    )
+    {
     }
 
     /** @return Comment|Comment[]|null */
@@ -44,12 +46,16 @@ class FileCommenter implements Commenter
                 return true;
             });
 
-        if (! $frame) {
+        if (!$frame) {
             return null;
         }
 
+        $filePath = $this->useRelativePath && str_starts_with($frame->file, base_path())
+            ? substr($frame->file, strlen(base_path()) + 1)
+            : $frame->file;
+
         return [
-            Comment::make('file', $frame->file),
+            Comment::make('file', $filePath),
             Comment::make('line', $frame->lineNumber),
         ];
     }
