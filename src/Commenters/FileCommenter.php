@@ -13,8 +13,7 @@ class FileCommenter implements Commenter
         public int   $backtraceLimit = 40,
         public array $excludePathSegments = [],
         public bool  $useRelativePath = false,
-    )
-    {
+    ) {
     }
 
     /** @return Comment|Comment[]|null */
@@ -46,7 +45,7 @@ class FileCommenter implements Commenter
                 return true;
             });
 
-        if (!$frame) {
+        if (! $frame) {
             return null;
         }
 

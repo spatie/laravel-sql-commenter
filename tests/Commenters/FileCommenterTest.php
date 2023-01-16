@@ -39,4 +39,3 @@ it('logs the file use relative path', function () {
     app()->setBasePath(__DIR__);
     User::count();
 });
-
