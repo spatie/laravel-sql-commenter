@@ -2,6 +2,19 @@
 
 All notable changes to `laravel-sql-commenter` will be documented in this file.
 
+## 1.3.0 - 2023-01-16
+
+### What's Changed
+
+- Bump dependabot/fetch-metadata from 1.3.4 to 1.3.5 by @dependabot in https://github.com/spatie/laravel-sql-commenter/pull/8
+- Added ability to use relative path in FileCommenter by @peresmishnyk in https://github.com/spatie/laravel-sql-commenter/pull/11
+
+### New Contributors
+
+- @peresmishnyk made their first contribution in https://github.com/spatie/laravel-sql-commenter/pull/11
+
+**Full Changelog**: https://github.com/spatie/laravel-sql-commenter/compare/1.2.0...1.3.0
+
 ## 1.2.0 - 2022-10-14
 
 ### What's Changed
