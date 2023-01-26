@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-sql-commenter` will be documented in this file.
 
+## 1.3.1 - 2023-01-26
+
+- support L10
+
 ## 1.3.0 - 2023-01-16
 
 ### What's Changed
