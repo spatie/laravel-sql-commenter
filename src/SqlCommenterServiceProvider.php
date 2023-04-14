@@ -3,6 +3,7 @@
 namespace Spatie\SqlCommenter;
 
 use Illuminate\Database\Connection;
+use Illuminate\Support\Facades\DB;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Spatie\SqlCommenter\Commenters\Commenter;
@@ -29,18 +30,24 @@ class SqlCommenterServiceProvider extends PackageServiceProvider
             return new $commenterClass();
         });
 
-        $this->app->get('db.connection')
-            ->beforeExecuting(function (
-                string     &$query,
-                array      &$bindings,
-                Connection $connection,
-            ) {
-                $sqlCommenter = app(SqlCommenter::class);
 
-                $commenters = $this->instanciateCommenters(config('sql-commenter.commenters'));
+        $connections = config('sql-commenter.connections', []);
 
-                $query = $sqlCommenter->commentQuery($query, $connection, $commenters);
-            });
+        if (empty($connections)) {
+            $connections = [config('database.default')];
+        }
+
+        collect($connections)->each(fn (string $conn) => DB::connection($conn)->beforeExecuting(function (
+            string &$query,
+            array &$bindings,
+            Connection $connection,
+        ) {
+            $sqlCommenter = app(SqlCommenter::class);
+
+            $commenters = $this->instanciateCommenters(config('sql-commenter.commenters'));
+
+            $query = $sqlCommenter->commentQuery($query, $connection, $commenters);
+        }));
     }
 
     /**
