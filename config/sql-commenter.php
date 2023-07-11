@@ -28,4 +28,12 @@ return [
      * the SqlCommenter class and specify your custom class here
      */
     'commenter_class' => Spatie\SqlCommenter\SqlCommenter::class,
+
+    /**
+     * The database connections for which you want to add comments.
+     * Defaults to the default connection defined in config/database.php
+     */
+    'connections' => [
+        // 'mysql',
+    ],
 ];
