@@ -12,7 +12,7 @@ class CurrentUserCommenter implements Commenter
     {
         SqlCommenter::disable();
 
-        /** @var \Illuminate\Database\Eloquent\Model $user */
+        /** @var ?\Illuminate\Database\Eloquent\Model $user */
         $user = auth()->user();
 
         SqlCommenter::enable();
@@ -23,7 +23,7 @@ class CurrentUserCommenter implements Commenter
 
         return [
             Comment::make('user_id', $user->getKey()),
-            Comment::make('user_email', $user->email),
+            Comment::make('user_email', $user->email ?? ''),
         ];
     }
 }

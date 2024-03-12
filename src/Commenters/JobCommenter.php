@@ -21,8 +21,10 @@ class JobCommenter implements Commenter
         }
 
         try {
+            /** @phpstan-ignore-next-line  */
             $pipeline = invade(app(Dispatcher::class))->pipeline;
 
+            /** @phpstan-ignore-next-line  */
             $job = invade($pipeline)->passable;
         } catch (Throwable) {
             return null;

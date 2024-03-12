@@ -51,7 +51,7 @@ class SqlCommenterServiceProvider extends PackageServiceProvider
     }
 
     /**
-     * @param array<class-string<Commenter> $commenterClasses
+     * @param array<class-string<Commenter>> $commenterClasses
      *
      * @return array<Commenter>
      */
