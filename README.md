@@ -89,7 +89,7 @@ If you want to add other arbitrary comments to the SqlComment, you can use the `
 ```php
 use Spatie\SqlCommenter\SqlCommenter;
 
-SqlCommenter::addComment('foo', 'bar');
+app(SqlCommenter::class)->addComment('foo', 'bar');
 
 // select * from "users"/*foo='bar'*/;
 ```
