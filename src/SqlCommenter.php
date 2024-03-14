@@ -11,11 +11,11 @@ use Spatie\SqlCommenter\Commenters\Commenter;
 class SqlCommenter
 {
     /** @var array<Comment> */
-    protected static array $extraComments = [];
+    protected array $extraComments = [];
 
-    public static function addComment(string $key, ?string $value): void
+    public function addComment(string $key, ?string $value): void
     {
-        static::$extraComments[$key] = Comment::make($key, $value);
+        $this->extraComments[$key] = Comment::make($key, $value);
     }
 
     public static function enable(): void
@@ -96,9 +96,9 @@ class SqlCommenter
      */
     protected function addExtraComments(Collection $comments, string $query, Connection $connection): void
     {
-        $comments->push(...self::$extraComments);
+        $comments->push(...$this->extraComments);
 
-        self::$extraComments = [];
+        $this->extraComments = [];
     }
 
     /**

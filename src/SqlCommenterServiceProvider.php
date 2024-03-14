@@ -20,7 +20,7 @@ class SqlCommenterServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        $this->app->singleton(SqlCommenter::class, function () {
+        $this->app->scoped(SqlCommenter::class, function () {
             $commenterClass = config('sql-commenter.commenter_class');
 
             if (! is_a($commenterClass, SqlCommenter::class, true)) {

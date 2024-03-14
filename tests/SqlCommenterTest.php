@@ -16,7 +16,7 @@ it('can add extra comments', function () {
         expect($event->sql)->toContainComment('foo', 'bar');
     });
 
-    SqlCommenter::addComment('foo', 'bar');
+    app(SqlCommenter::class)->addComment('foo', 'bar');
 
     dispatch(new UsersJob());
 });
@@ -26,7 +26,7 @@ it('will not add comments if there already are comments', function () {
         expect($event->sql)->not()->toContainComment('foo', 'bar');
     });
 
-    SqlCommenter::addComment('foo', 'bar');
+    app(SqlCommenter::class)->addComment('foo', 'bar');
 
     DB::statement(<<<mysql
         select * from users; /*existing='comment'*/
@@ -89,8 +89,8 @@ it('has a method to enable adding comments', function () {
 });
 
 it('will not include empty comments', function () {
-    SqlCommenter::addComment('foo', 'bar');
-    SqlCommenter::addComment('baz', '');
+    app(SqlCommenter::class)->addComment('foo', 'bar');
+    app(SqlCommenter::class)->addComment('baz', '');
 
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) {
         expect($event->sql)->toContainComment('foo', 'bar');
