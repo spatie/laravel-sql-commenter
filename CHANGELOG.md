@@ -2,6 +2,30 @@
 
 All notable changes to `laravel-sql-commenter` will be documented in this file.
 
+## 2.0.0 - 2024-03-14
+
+### Upgrade guide
+
+You can no longer call `SqlCommenter::addComment` statically, you now need to fetch the commenter instance from the container or have it dependency injected into your code.
+
+```diff
+- SqlCommenter::addComment('My comment');
++ app(SqlCommenter::class)->addComment('My comment');
+
+```
+### What's Changed
+
+* Bump spatie/invade version to 2.0 by @vigneshgurusamy in https://github.com/spatie/laravel-sql-commenter/pull/19
+* Add support for laravel 11 by @shuvroroy in https://github.com/spatie/laravel-sql-commenter/pull/20
+* Add Octane compatibility by @riasvdv in https://github.com/spatie/laravel-sql-commenter/pull/22
+
+### New Contributors
+
+* @shuvroroy made their first contribution in https://github.com/spatie/laravel-sql-commenter/pull/20
+* @riasvdv made their first contribution in https://github.com/spatie/laravel-sql-commenter/pull/22
+
+**Full Changelog**: https://github.com/spatie/laravel-sql-commenter/compare/1.4.0...2.0.0
+
 ## 1.4.0 - 2023-07-11
 
 ### What's Changed
