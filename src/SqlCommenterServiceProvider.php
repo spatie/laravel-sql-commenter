@@ -37,7 +37,12 @@ class SqlCommenterServiceProvider extends PackageServiceProvider
             $connections = [config('database.default')];
         }
 
-        collect($connections)->each(fn (string $conn) => DB::connection($conn)->beforeExecuting(function (
+        collect($connections)->each(fn (string $conn) => $this->initiateForConnection($conn));
+    }
+
+    public function initiateForConnection(string $conn): void
+    {
+        DB::connection($conn)->beforeExecuting(function (
             string &$query,
             array &$bindings,
             Connection $connection,
@@ -47,7 +52,7 @@ class SqlCommenterServiceProvider extends PackageServiceProvider
             $commenters = $this->instanciateCommenters(config('sql-commenter.commenters'));
 
             $query = $sqlCommenter->commentQuery($query, $connection, $commenters);
-        }));
+        });
     }
 
     /**
