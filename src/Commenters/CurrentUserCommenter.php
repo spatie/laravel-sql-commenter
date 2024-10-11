@@ -8,6 +8,10 @@ use Spatie\SqlCommenter\SqlCommenter;
 
 class CurrentUserCommenter implements Commenter
 {
+    public function __construct(protected bool $includeEmail = false)
+    {
+    }
+
     public function comments(string $query, Connection $connection): Comment|array|null
     {
         SqlCommenter::disable();
@@ -23,7 +27,7 @@ class CurrentUserCommenter implements Commenter
 
         return [
             Comment::make('user_id', $user->getKey()),
-            Comment::make('user_email', $user->email ?? ''),
+            $this->includeEmail ? Comment::make('user_email', $user->email ?? '') : null,
         ];
     }
 }

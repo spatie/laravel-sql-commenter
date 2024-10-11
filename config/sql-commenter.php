@@ -18,7 +18,7 @@ return [
             'excludePathSegments' => [],
             'useRelativePath' => false,
         ],
-        Spatie\SqlCommenter\Commenters\CurrentUserCommenter::class,
+        Spatie\SqlCommenter\Commenters\CurrentUserCommenter::class => ['includeEmail' => true],
         // Spatie\SqlCommenter\Commenters\FrameworkVersionCommenter::class,
         // Spatie\SqlCommenter\Commenters\DbDriverCommenter::class,
     ],
