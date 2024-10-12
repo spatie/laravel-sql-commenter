@@ -10,9 +10,3 @@ expect()->extend('toContainComment', function (string $key, string|int|null $val
 
     return $this;
 });
-
-expect()->extend('notToContainComment', function (string $key, string|int|null $value) {
-    expect($this->value)->not->toContain((string)Comment::make($key, $value));
-
-    return $this;
-});

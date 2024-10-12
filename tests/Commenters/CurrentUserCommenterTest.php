@@ -36,7 +36,7 @@ it('can exclude the user email', function () {
 
     Event::listen(QueryExecuted::class, function (QueryExecuted $event) use ($user) {
         expect($event->sql)->toContainComment('user_id', $user->id)
-            ->and($event->sql)->notToContainComment('user_email', $user->email);
+            ->and($event->sql)->not->toContainComment('user_email', $user->email);
     });
 
     User::all();
