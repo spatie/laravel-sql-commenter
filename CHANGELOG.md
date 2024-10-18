@@ -2,6 +2,20 @@
 
 All notable changes to `laravel-sql-commenter` will be documented in this file.
 
+## 2.1.0 - 2024-10-18
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 1.6.0 to 2.2.0 by @dependabot in https://github.com/spatie/laravel-sql-commenter/pull/25
+* Bump dependabot/fetch-metadata from 1.6.0 to 2.2.0 by @dependabot in https://github.com/spatie/laravel-sql-commenter/pull/27
+* Add support for adding connections after boot by @jholloman in https://github.com/spatie/laravel-sql-commenter/pull/26
+
+### New Contributors
+
+* @jholloman made their first contribution in https://github.com/spatie/laravel-sql-commenter/pull/26
+
+**Full Changelog**: https://github.com/spatie/laravel-sql-commenter/compare/2.0.0...2.1.0
+
 ## 2.0.0 - 2024-03-14
 
 ### Upgrade guide
@@ -11,6 +25,7 @@ You can no longer call `SqlCommenter::addComment` statically, you now need to fe
 ```diff
 - SqlCommenter::addComment('My comment');
 + app(SqlCommenter::class)->addComment('My comment');
+
 
 ```
 ### What's Changed
