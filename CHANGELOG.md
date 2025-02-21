@@ -2,6 +2,19 @@
 
 All notable changes to `laravel-sql-commenter` will be documented in this file.
 
+## 2.1.1 - 2025-02-21
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 2.2.0 to 2.3.0 by @dependabot in https://github.com/spatie/laravel-sql-commenter/pull/29
+* Laravel 12.x Compatibility by @laravel-shift in https://github.com/spatie/laravel-sql-commenter/pull/30
+
+### New Contributors
+
+* @laravel-shift made their first contribution in https://github.com/spatie/laravel-sql-commenter/pull/30
+
+**Full Changelog**: https://github.com/spatie/laravel-sql-commenter/compare/2.1.0...2.1.1
+
 ## 2.1.0 - 2024-10-18
 
 ### What's Changed
@@ -25,6 +38,7 @@ You can no longer call `SqlCommenter::addComment` statically, you now need to fe
 ```diff
 - SqlCommenter::addComment('My comment');
 + app(SqlCommenter::class)->addComment('My comment');
+
 
 
 ```
