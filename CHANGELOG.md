@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-sql-commenter` will be documented in this file.
 
+## 2.2.0 - 2026-03-06
+
+### What's Changed
+
+- Laravel 13.x Compatibility
+- Drop support for PHP < 8.4 and Laravel < 12
+- Update to Pest 4
+
 ## 2.1.1 - 2025-02-21
 
 ### What's Changed
@@ -38,6 +46,7 @@ You can no longer call `SqlCommenter::addComment` statically, you now need to fe
 ```diff
 - SqlCommenter::addComment('My comment');
 + app(SqlCommenter::class)->addComment('My comment');
+
 
 
 
