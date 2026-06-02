@@ -1,8 +1,8 @@
 # Add comments to SQL queries made by Laravel
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-sql-commenter.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-sql-commenter)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/spatie/laravel-sql-commenter/run-tests?label=tests)](https://github.com/spatie/laravel-sql-commenter/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/spatie/laravel-sql-commenter/Check%20&%20fix%20styling?label=code%20style)](https://github.com/spatie/laravel-sql-commenter/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain)
+[![GitHub Tests Action Status](https://github.com/spatie/laravel-sql-commenter/actions/workflows/run-tests.yml/badge.svg)](https://github.com/spatie/laravel-sql-commenter/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Code Style Action Status](https://github.com/spatie/laravel-sql-commenter/actions/workflows/php-cs-fixer.yml/badge.svg)](https://github.com/spatie/laravel-sql-commenter/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-sql-commenter.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-sql-commenter)
 
 This package can add comments to queries performed by Laravel. These comments will use the [sqlcommenter](https://google.github.io/sqlcommenter/) format, which is understood by various tools and services, such as [PlanetScale's Query Insights](https://docs.planetscale.com/concepts/query-insights).
