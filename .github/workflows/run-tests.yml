@@ -9,6 +9,20 @@ on:
       - main
 
 jobs:
+  archive:
+    name: Package archive
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Verify archive contents
+        run: |
+          git ls-files src config composer.json README.md LICENSE.md CHANGELOG.md | sort > expected-files.txt
+          git archive HEAD | tar -tf - | grep -v '/$' | sort > archive-files.txt
+          diff -u expected-files.txt archive-files.txt
+
   test:
     runs-on: ubuntu-latest
 

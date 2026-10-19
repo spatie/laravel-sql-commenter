@@ -46,7 +46,7 @@ class ControllerCommenter implements Commenter
             return [$controller, $action];
         }
 
-        $controller = explode('@', $action)[0] ?? null;
+        $controller = explode('@', $action)[0];
 
         if (! $this->includeNamespace) {
             $controller = class_basename($controller);
