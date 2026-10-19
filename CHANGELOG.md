@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-sql-commenter` will be documented in this file.
 
+## 2.2.1 - 2026-10-19
+
+### Fixes
+
+- Exclude the PHP CS Fixer configuration from distributed package archives. Thanks to @jackbayliss in #46.
+- Add regression coverage for package archive contents.
+- Restore Laravel-aware PHPStan checks and run them on pull requests.
+
+No breaking changes or changes to supported PHP/Laravel versions.
+
+**Full Changelog**: https://github.com/spatie/laravel-sql-commenter/compare/2.2.0...2.2.1
+
 ## 2.2.0 - 2026-03-06
 
 ### What's Changed
@@ -46,6 +58,7 @@ You can no longer call `SqlCommenter::addComment` statically, you now need to fe
 ```diff
 - SqlCommenter::addComment('My comment');
 + app(SqlCommenter::class)->addComment('My comment');
+
 
 
 
