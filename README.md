@@ -24,7 +24,7 @@ The comments allow you easily pinpoint the source of the query in your codebase.
 
 ## Support us
 
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/laravel-sql-commenter.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/laravel-sql-commenter)
+[<img src="https://spatie.be/github-ad-image/laravel-sql-commenter.jpg" width="419px" />](https://spatie.be/github-ad-click/laravel-sql-commenter)
 
 We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
 
